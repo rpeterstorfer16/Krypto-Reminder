@@ -22,8 +22,8 @@ Betrag(Fiat) erwerben könnte. Ebenso kann der Benutzer von ihm getätigte Käuf
 
 ![](https://github.com/rpeterstorfer16/Krypto-Reminder/blob/main/assets/Homescreen.png)
 
-Auf der linken Seite des Bilschirms sind die vom User erstelleten alerts zu sehen. Wählt er eine dieser aus, erscheint 
-eine detaillierte Activity, welche detailliertere Angaben zum alert und zum jewiligen coin anzeigt.
+Auf der linken Seite des Bildschirms sind die vom user erstellten alerts zu sehen. Wählt er eine dieser aus, erscheint 
+eine detaillierte Activity, welche detailliertere Angaben zum alert und zum jeweiligen coin anzeigt.
 
 ## Beschreibung der Anbindung an die API's
 
