@@ -13,6 +13,9 @@ Das gesamte Layout, sowie alle OnClickListener auf Button etc. wurden erledigt. 
 wurde die Anbindung an die API aus dem Arbeitspaket nächster Woche erledigt.
 
 ### Welche Probleme sind aufgetreten
+Die BottomNavigationView war etwas zeitaufwendig, da ich einige kleine Details eingebaut habe.
+
+Das selbst erstellte Icon oben links im screen ist etwas zu klein.
 
 Da ich noch keine Anbindung an die API habe, kann ich noch kein Objekt von coin erstellen. Dies wird jedoch für meine Fragments benötigt. Darum habe ich
 <ul><li>Layout</li><li>Fragments</li></ul> 
@@ -30,4 +33,5 @@ Etwas im Vorsprung, da die Anbindung an die API etwas länger dauert als das Ers
 
 Nächste Woche wird 
 <ul><li>Über GPS-Sensor Long- und Latitute bekommen</li><li>Fragments</li></ul>
-erledigt.
+
+und das Ändern der Größe des icons erledigt.
