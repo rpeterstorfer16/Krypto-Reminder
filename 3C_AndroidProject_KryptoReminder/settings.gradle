@@ -1,0 +1,2 @@
+rootProject.name = "3C_AndroidProject_Krypto-Reminder"
+include ':app'

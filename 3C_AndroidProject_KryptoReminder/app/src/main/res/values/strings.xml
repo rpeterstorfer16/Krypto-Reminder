@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">3C_AndroidProjekt_Krypto-Reminder</string>
+    <string name="text_save_menu">Transaction</string>
+    <string name="text_alerts_menu">Alerts</string>
+    <string name="text_converter_menu">Converter</string>
+    <string name="text_settings_menu">Settings</string>
+    <string name="text_empty"></string>
+    <string name="text_home_menu">Home</string>
+</resources>
