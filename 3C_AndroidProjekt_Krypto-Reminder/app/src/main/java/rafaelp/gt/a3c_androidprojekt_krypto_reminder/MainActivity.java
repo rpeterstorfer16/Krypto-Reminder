@@ -1,13 +1,19 @@
 package rafaelp.gt.a3c_androidprojekt_krypto_reminder;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -15,7 +21,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.google.android.material.bottomnavigation.BottomNavigationMenu;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -24,18 +29,24 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final int RQ_ACCESS_FINE_LOCATION = 123;
+    private boolean isGpsAllowed = false;
+    private LocationListener locationListener;
+    private LocationManager locationManager;
+    private double lat;
+    private double lon;
+    FiatFromUser ffu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // TextView testView = findViewById(R.id.testtest);
-        // testView.setText(getCoins(10,"EUR").toString());
 
         ImageButton settingsButton = findViewById(R.id.settingsButton);
 
@@ -47,6 +58,16 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        registerSystemService();
+        checkPermissionGPS();
+
+
+        TextView tv = findViewById(R.id.testtest);
+        tv.setText(getCoins(2, "EUR").toString());
+
+
+        TextView testView = findViewById(R.id.testtesttest);
 
 
         // Declaration and setting of BottomNavigationBar
@@ -96,7 +117,10 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
     }
+
 
     public ArrayList<Coin> getCoins(int amountOfCoins, String currency) {
         String coin = "";
@@ -138,6 +162,145 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return coinList;
+
+    }
+
+    private void registerSystemService() {
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        // from Api 23 and above you can call getSystemService this way:
+        // locationManager = (LocationManager) getSystemService(LocationManager.class);
+    }
+
+    private void checkPermissionGPS() {
+        String permission = Manifest.permission.ACCESS_FINE_LOCATION;
+        if (ActivityCompat.checkSelfPermission(this, permission)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{permission},
+                    RQ_ACCESS_FINE_LOCATION);
+        } else {
+            gpsGranted();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode != RQ_ACCESS_FINE_LOCATION) return;
+        if (grantResults.length > 0 &&
+                grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+        } else {
+            gpsGranted();
+        }
+    }
+
+    private void gpsGranted() {
+        isGpsAllowed = true;
+        locationListener = new LocationListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onLocationChanged(Location location) {
+                displayLocation(location);
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+            }
+        };
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    protected void onResume() {
+        super.onResume();
+        super.onPostResume();
+        if (isGpsAllowed) {
+            locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    400000,
+                    2000,
+                    locationListener);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (isGpsAllowed) locationManager.removeUpdates(locationListener);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void displayLocation(Location location) {
+        double latNoDez = location == null ? -1 : location.getLatitude();
+        double lonNoDez = location == null ? -1 : location.getLongitude();
+
+
+        lat = Math.round(latNoDez * 1000) / 1000.0;
+        lon = Math.round(lonNoDez * 1000) / 1000.0;
+
+        TextView testView = findViewById(R.id.testtesttest);
+
+        if (ffu == null) {
+            ffu = getFiat(lat, lon);
+            testView.setText(ffu.toString());
+
+        } else {
+            testView.setText(ffu.toString());
+        }
+
+
+    }
+
+    public FiatFromUser getFiat(double latitute, double longitute) {
+        String coin = "";
+        String accessKey = "5fdb5f6c40e83447a40ea1615831570c";
+        FiatFromUser fiatFromUser = null;
+
+
+        FiatCurrencyServerTask task = new FiatCurrencyServerTask();
+        try {
+
+            String result = task.execute("http://api.positionstack.com/v1/reverse?" + "access_key=" + accessKey + "&query=" + latitute + "," + longitute + "&country_module=1").get();
+            JSONObject js = new JSONObject(result);
+
+            JSONArray ja = js.getJSONArray("data");
+
+            JSONObject js2 = ja.getJSONObject(0);
+
+            JSONObject js3 = js2.getJSONObject("country_module");
+
+            JSONArray jsArray = js3.getJSONArray("currencies");
+
+            JSONObject jsonObject = jsArray.getJSONObject(0);
+            coin += jsonObject.getString("symbol");
+            coin += ";";
+            coin += jsonObject.getString("code");
+            coin += ";";
+            coin += jsonObject.getString("name");
+
+
+            String[] coinArray = coin.split(";");
+
+            fiatFromUser = new FiatFromUser(coinArray[0], coinArray[1], coinArray[2]);
+
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return fiatFromUser;
 
     }
 

@@ -3,30 +3,22 @@ package rafaelp.gt.a3c_androidprojekt_krypto_reminder;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 
-import javax.net.ssl.HttpsURLConnection;
+public class FiatCurrencyServerTask extends AsyncTask<String, Integer, String> {
 
-public class CryptocurrencyServerTask extends AsyncTask<String, Integer, String> {
-
-    private final String TAG = CryptocurrencyServerTask.class.getSimpleName();
+    private final String TAG = FiatCurrencyServerTask.class.getSimpleName();
 
     @Override
     protected String doInBackground(String... strings) {
         String sJson = "";
         String URL = strings[0];
         try {
-            HttpsURLConnection connection = (HttpsURLConnection) new URL(URL).openConnection();
+            HttpURLConnection connection = (HttpURLConnection) new URL(URL).openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Content-Type", "application/json");
             int responseCode = connection.getResponseCode();
