@@ -35,3 +35,25 @@ Nächste Woche wird
 <ul><li>Über GPS-Sensor Long- und Latitute bekommen</li><li>Fragments</li></ul>
 
 und das Ändern der Größe des icons erledigt.
+
+## 02.06 - 09.06
+
+### Was ist gut gelaufen?
+
+Anbindung an die Coinstack API verlief sehr gut. GPS Daten auslesem waren aufgrund der Github Folien kein Problem.
+
+### Welche Arbeitspakete wurden erledigt?
+
+Die vorgenommenen Arbeitspakete für diese Woche wurden erledigt.
+
+### Wie liegt die Gruppe im Zeitplan?
+
+Genau wie geplant.
+
+### Was wird die nächste Woche umgesetzt?
+
+- Alerts
+- Speichern von Transaktionen
+- Converter
+
+
