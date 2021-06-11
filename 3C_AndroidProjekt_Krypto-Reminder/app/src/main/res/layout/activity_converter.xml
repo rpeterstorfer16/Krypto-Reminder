@@ -112,27 +112,41 @@
                 android:layout_weight="1"
                 android:inputType="none" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/cryptocurrencyTextInputLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginBottom="8dp"
-                android:ellipsize="start"
-                android:hint="Equals">
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/cryptoAmountTextInputEditText"
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/cryptocurrencyTextInputLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:gravity="bottom"
+
+
                     android:layout_weight="1"
-                    android:gravity="bottom" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:ellipsize="start"
+                    android:hint="Equals">
 
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/cryptoAmountTextInputEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="bottom" />
+                </com.google.android.material.textfield.TextInputLayout>
 
+                <ImageView
+                    android:id="@+id/imageViewCoinIcon"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginTop="5dp"
+                    app:srcCompat="@android:drawable/screen_background_light_transparent" />
+            </LinearLayout>
 
 
             <Button

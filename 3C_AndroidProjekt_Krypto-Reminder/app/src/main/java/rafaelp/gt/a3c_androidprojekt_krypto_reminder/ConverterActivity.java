@@ -1,6 +1,8 @@
 package rafaelp.gt.a3c_androidprojekt_krypto_reminder;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,16 +11,24 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -47,7 +57,11 @@ public class ConverterActivity extends AppCompatActivity {
         convertButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tv.setText(String.valueOf(calculateAmount()));
+                try {
+                    tv.setText(String.valueOf(calculateAmount()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
             }
         });
@@ -153,7 +167,7 @@ public class ConverterActivity extends AppCompatActivity {
 
     }
 
-    private double calculateAmount() {
+    private double calculateAmount() throws IOException {
 
         AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.TextViewCryptocurrencyConverter);
         String cryptocurrency = "";
@@ -184,6 +198,12 @@ public class ConverterActivity extends AppCompatActivity {
         if (!amountView.getText().equals("")) {
             amount = Integer.parseInt(String.valueOf(amountView.getText()));
         }
+
+        ImageView iv = findViewById(R.id.imageViewCoinIcon);
+
+        Picasso.get().load(coin.getIconLink()).into(iv);
+
+        //tv.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(getApplicationContext(), d), null);
 
         return amount / coin.getCurrentPrice();
 
