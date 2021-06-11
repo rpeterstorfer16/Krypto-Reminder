@@ -14,39 +14,68 @@
         android:layout_height="match_parent"
         android:layout_weight="1">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:fontFamily="@font/roboto_medium_italic"
-            android:padding="10dp"
-            android:text="Converter"
-            android:textSize="20dp" />
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/cryptoTextInputLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="32dp"
-            android:ellipsize="start"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            android:hint="Amount">
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto_medium_italic"
+                android:padding="10dp"
+                android:text="Converter"
+                android:textSize="20dp" />
 
-            <AutoCompleteTextView
-                android:id="@+id/autoCompleteTextView"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/currencyTextInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="none" />
+                android:layout_gravity="bottom"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="8dp"
+                android:ellipsize="start"
+                android:hint="Amount">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fiatAmountTextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="bottom" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/cryptoTextInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="8dp"
+                android:ellipsize="start"
+
+                android:hint="Currency">
+
+                <AutoCompleteTextView
+                    android:id="@+id/TextViewConvertCurrency"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+
     </FrameLayout>
 
 
@@ -74,18 +103,40 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:ellipsize="start"
-            android:hint="Equals">
+            android:hint="Cryptocurrency">
 
             <AutoCompleteTextView
-                android:id="@+id/autoCompleteTextView2"
+                android:id="@+id/TextViewCryptocurrencyConverter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:inputType="none" />
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/cryptocurrencyTextInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="8dp"
+                android:ellipsize="start"
+                android:hint="Equals">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/cryptoAmountTextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="bottom" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
 
             <Button
-                android:id="@+id/addAlertButton"
+                android:id="@+id/convertButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"

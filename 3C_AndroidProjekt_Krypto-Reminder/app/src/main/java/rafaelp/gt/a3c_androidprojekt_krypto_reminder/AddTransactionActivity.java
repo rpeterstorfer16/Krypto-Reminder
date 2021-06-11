@@ -4,15 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.ArrayList;
 
 public class AddTransactionActivity extends AppCompatActivity {
     @Override
@@ -22,6 +24,8 @@ public class AddTransactionActivity extends AppCompatActivity {
 
         Button cancelButton = findViewById(R.id.cancelTransactionButton);
         Button addTransactionButton = findViewById(R.id.saveTransactionButton);
+
+        fillInputLayout();
 
         BottomNavigationView bnv = findViewById(R.id.bottom_navigation);
         int duration = Toast.LENGTH_SHORT;
@@ -105,5 +109,23 @@ public class AddTransactionActivity extends AppCompatActivity {
                 toast.show();
             }
         });
+
+
+    }
+
+    public void fillInputLayout()
+    {
+        MainActivity ma = MainActivity.getInstance();
+        ArrayList<Coin> coins = ma.coins;
+        String[] coinsForView = new String[coins.size()];
+        int i = 0;
+        for(Coin coinStrings : coins)
+        {
+            coinsForView[i] = coinStrings.getCoinName();
+            i++;
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, coinsForView);
+        AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.TextViewAddTransaction);
+        textView.setAdapter(adapter);
     }
 }

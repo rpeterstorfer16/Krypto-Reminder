@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -40,13 +41,15 @@ public class MainActivity extends AppCompatActivity {
     private LocationManager locationManager;
     private double lat;
     private double lon;
-    FiatFromUser ffu;
+    private FiatFromUser ffu;
+    protected ArrayList<Coin> coins;
+    private static MainActivity instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        instance = this;
 
         ImageButton settingsButton = findViewById(R.id.settingsButton);
 
@@ -62,9 +65,9 @@ public class MainActivity extends AppCompatActivity {
         registerSystemService();
         checkPermissionGPS();
 
-
         TextView tv = findViewById(R.id.testtest);
-        tv.setText(getCoins(2, "EUR").toString());
+        coins = getCoins(100,"EUR");
+        //tv.setText(coins.toString());
 
 
         TextView testView = findViewById(R.id.testtesttest);
@@ -246,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
         lat = Math.round(latNoDez * 1000) / 1000.0;
         lon = Math.round(lonNoDez * 1000) / 1000.0;
 
-        TextView testView = findViewById(R.id.testtesttest);
+        /*TextView testView = findViewById(R.id.testtesttest);
 
         if (ffu == null) {
             ffu = getFiat(lat, lon);
@@ -255,6 +258,9 @@ public class MainActivity extends AppCompatActivity {
         } else {
             testView.setText(ffu.toString());
         }
+        */
+         
+
 
 
     }
@@ -302,6 +308,11 @@ public class MainActivity extends AppCompatActivity {
 
         return fiatFromUser;
 
+    }
+
+    public static MainActivity getInstance()
+    {
+        return instance;
     }
 
 

@@ -37,7 +37,7 @@
             android:hint="Amount">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/currencyTextInputEditText"
+                android:id="@+id/fiatAmountTextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -68,7 +68,7 @@
             android:inputType="none">
 
             <AutoCompleteTextView
-                android:id="@+id/autoCompleteTextView"
+                android:id="@+id/TextViewAddTransaction"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
