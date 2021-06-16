@@ -8,16 +8,21 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Coin;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Transaction;
 
 public class AddTransactionActivity extends AppCompatActivity {
     @Override
@@ -40,7 +45,7 @@ public class AddTransactionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(AddTransactionActivity.this, SettingsActivity.class));
-                overridePendingTransition(0,0);
+                overridePendingTransition(0, 0);
 
 
                 int duration = Toast.LENGTH_SHORT;
@@ -91,7 +96,7 @@ public class AddTransactionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(AddTransactionActivity.this, TransactionActivity.class));
-                overridePendingTransition(0,0);
+                overridePendingTransition(0, 0);
 
                 int duration = Toast.LENGTH_SHORT;
 
@@ -104,9 +109,29 @@ public class AddTransactionActivity extends AppCompatActivity {
         addTransactionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MainActivity ma = MainActivity.getInstance();
+                TextInputEditText addAlertAmount = findViewById(R.id.addAlertAmount);
+                double amount = Double.parseDouble(String.valueOf(addAlertAmount.getText()));
+
+                TextView AddTransactionCryptocurrency = findViewById(R.id.TextViewCryptocurrency);
+                String cryptocurrency = String.valueOf(AddTransactionCryptocurrency.getText());
+
+                Coin selectedCoin = null;
+
+
+
+                for(Coin c : ma.coins)
+                {
+                    String coin = c.getCoinName();
+                    if(coin.equals(cryptocurrency)) selectedCoin = c;
+                }
+
+                Transaction transaction = new Transaction(amount,selectedCoin.getCoinName(),selectedCoin.getIconLink(),new Date());
+
                 Intent intent = new Intent(AddTransactionActivity.this, TransactionActivity.class);
+                intent.putExtra("transaction", (Serializable) transaction);
                 startActivity(intent);
-                overridePendingTransition(0,0);
+                overridePendingTransition(0, 0);
 
 
                 int duration = Toast.LENGTH_SHORT;
@@ -118,19 +143,17 @@ public class AddTransactionActivity extends AppCompatActivity {
 
     }
 
-    public void fillInputLayout()
-    {
+    public void fillInputLayout() {
         MainActivity ma = MainActivity.getInstance();
         ArrayList<Coin> coins = ma.coins;
         String[] coinsForView = new String[coins.size()];
         int i = 0;
-        for(Coin coinStrings : coins)
-        {
+        for (Coin coinStrings : coins) {
             coinsForView[i] = coinStrings.getCoinName();
             i++;
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, coinsForView);
-        AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.TextViewAddTransaction);
+        AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.TextViewCryptocurrency);
         textView.setAdapter(adapter);
     }
 }

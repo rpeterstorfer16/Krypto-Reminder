@@ -1,8 +1,9 @@
 package rafaelp.gt.a3c_androidprojekt_krypto_reminder;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Transaction {
+public class Transaction implements Serializable {
     private double amountOfCoins;
     private String coinName;
     private String iconLink;
