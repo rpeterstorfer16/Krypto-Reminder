@@ -56,4 +56,25 @@ Genau wie geplant.
 - Speichern von Transaktionen
 - Converter
 
+## 09.06 - 16.06
+
+### Was ist gut gelaufen?
+
+Beim Converter wurde ein zusätzliches Feature eingebaut, nämlich, dass man das zugehörige Icon der Cryptowährung sieht, dies war nicht zeitaufwendig und verlief sehr gut. 
+
+### Welche Arbeitspakete wurden erledigt?
+
+Alle drei vorgenommenen Pakete wurden erledigt und die lang überfälligen Fragments ebenso.
+
+### Wie liegt die Gruppe im Zeitplan?
+
+Genau wie geplant.
+
+### Was wird die nächste Woche umgesetzt?
+
+-Notifications
+-Preferences
+-Services
+-fehlendes Design
+
 
