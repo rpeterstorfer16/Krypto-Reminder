@@ -1,22 +1,33 @@
-package rafaelp.gt.a3c_androidprojekt_krypto_reminder;
+package Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Alert;
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Coin;
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
+
 public class AddAlertActivity extends AppCompatActivity {
+
+    MainActivity ma = MainActivity.getInstance();
+    ArrayList<Coin> coins;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +43,7 @@ public class AddAlertActivity extends AppCompatActivity {
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AddAlertActivity.this,SettingsActivity.class));
+                startActivity(new Intent(AddAlertActivity.this, SettingsActivity.class));
                 overridePendingTransition(0,0);
 
                 int duration = Toast.LENGTH_SHORT;
@@ -96,8 +107,30 @@ public class AddAlertActivity extends AppCompatActivity {
         addAlertButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AddAlertActivity.this, MainActivity.class));
+                AutoCompleteTextView cryptocurrencyTextView = (AutoCompleteTextView) findViewById(R.id.addAlertCryptocurrency);
+                TextView amountTextView = findViewById(R.id.addAlertAmount);
+
+                ArrayList<Coin> coins = ma.coins;
+
+                Coin selectedCoin = null;
+                String cryptocurrency = String.valueOf(cryptocurrencyTextView.getText());
+                double amount = Double.parseDouble(amountTextView.getText().toString());
+
+                for(Coin c : coins)
+                {
+                    String coin = c.getCoinName();
+                    if(coin.equals(cryptocurrency)) selectedCoin = c;
+                }
+
+
+                Alert alert = new Alert(selectedCoin.getCoinName(), selectedCoin.getCurrentPrice(),amount,selectedCoin.getPriceChangedIn24(),selectedCoin.getMarketCap(),selectedCoin.getIconLink());
+
+                Intent intent = new Intent(AddAlertActivity.this,MainActivity.class);
+                intent.putExtra("newAlert", (Serializable) alert);
+                startActivity(intent);
                 overridePendingTransition(0,0);
+
+
 
                 int duration = Toast.LENGTH_SHORT;
                 Toast toast = Toast.makeText(AddAlertActivity.this, "Alert saved", duration);
@@ -108,8 +141,7 @@ public class AddAlertActivity extends AppCompatActivity {
 
     public void fillInputLayout()
     {
-        MainActivity ma = MainActivity.getInstance();
-        ArrayList<Coin> coins = ma.coins;
+        coins = ma.coins;
         String[] coinsForView = new String[coins.size()];
         int i = 0;
         for(Coin coinStrings : coins)
@@ -118,7 +150,26 @@ public class AddAlertActivity extends AppCompatActivity {
             i++;
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, coinsForView);
-        AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.TextViewAddAlert);
+        AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.addAlertCryptocurrency);
         textView.setAdapter(adapter);
     }
+
+    public void addAlert()
+    {
+        AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.addAlertCryptocurrency);
+        String cryptocurrency = "";
+        if (!String.valueOf(textView.getText()).equals("")) {
+            cryptocurrency = String.valueOf(textView.getText());
+        }
+
+        TextView tv = findViewById(R.id.addAlertAmount);
+        double amount = Double.parseDouble(String.valueOf(tv.getText()));
+
+
+
+        //ArrayList<Coin> coins = getCoins(100,);
+
+    }
+
+
 }

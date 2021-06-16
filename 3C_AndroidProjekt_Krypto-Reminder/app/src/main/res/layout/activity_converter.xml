@@ -43,7 +43,7 @@
                 android:hint="Amount">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/fiatAmountTextInputEditText"
+                    android:id="@+id/addAlertAmount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -81,8 +81,8 @@
 
     <ImageView
 
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_gravity="center"
 
         android:src="@drawable/ic_convert_arrows" />
@@ -144,8 +144,10 @@
                     android:layout_width="100dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_marginTop="5dp"
-                    app:srcCompat="@android:drawable/screen_background_light_transparent" />
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="9dp"
+                    app:srcCompat="@android:drawable/screen_background_light_transparent"
+                    android:layout_marginLeft="3dp" />
             </LinearLayout>
 
 

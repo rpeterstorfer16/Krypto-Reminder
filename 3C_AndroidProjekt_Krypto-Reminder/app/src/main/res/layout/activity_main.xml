@@ -7,24 +7,13 @@
 
     <include layout="@layout/toolbar" />
 
-    <TextView
-        android:id="@+id/testtesttest"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
-
-    <TextView
-        android:id="@+id/testtest"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="4dp"
         android:layout_gravity="center"
-        android:layout_weight="1"
+        android:layout_weight="0.3"
         android:fontFamily="@font/roboto_medium_italic"
         android:padding="10dp"
         android:text="Alerts"
@@ -37,7 +26,25 @@
         android:layout_height="wrap_content"
         android:layout_weight="1">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
+            <fragment
+                android:id="@+id/fragLeft"
+                android:name="Activities.LeftFragment"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <fragment
+                android:id="@+id/fragRight"
+                android:name="Activities.RightFragment"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+        </LinearLayout>
 
 
     </FrameLayout>

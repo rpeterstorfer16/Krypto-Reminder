@@ -1,4 +1,4 @@
-package rafaelp.gt.a3c_androidprojekt_krypto_reminder;
+package Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
+
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Coin;
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
 
 public class AddTransactionActivity extends AppCompatActivity {
     @Override
@@ -36,7 +39,7 @@ public class AddTransactionActivity extends AppCompatActivity {
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AddTransactionActivity.this,SettingsActivity.class));
+                startActivity(new Intent(AddTransactionActivity.this, SettingsActivity.class));
                 overridePendingTransition(0,0);
 
 
@@ -101,8 +104,10 @@ public class AddTransactionActivity extends AppCompatActivity {
         addTransactionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AddTransactionActivity.this, TransactionActivity.class));
+                Intent intent = new Intent(AddTransactionActivity.this, TransactionActivity.class);
+                startActivity(intent);
                 overridePendingTransition(0,0);
+
 
                 int duration = Toast.LENGTH_SHORT;
                 Toast toast = Toast.makeText(AddTransactionActivity.this, "Transaction saved", duration);

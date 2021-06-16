@@ -1,4 +1,4 @@
-package rafaelp.gt.a3c_androidprojekt_krypto_reminder;
+package Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,14 +7,13 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
 
 public class TransactionActivity extends AppCompatActivity {
     @Override
@@ -32,8 +31,8 @@ public class TransactionActivity extends AppCompatActivity {
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(TransactionActivity.this,SettingsActivity.class));
-                overridePendingTransition(0,0);
+                startActivity(new Intent(TransactionActivity.this, SettingsActivity.class));
+                overridePendingTransition(0, 0);
 
             }
         });

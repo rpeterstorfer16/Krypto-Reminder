@@ -13,17 +13,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
-        android:layout_weight="1"
-        >
+        android:layout_weight="1">
 
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:fontFamily="sans-serif-smallcaps"
             android:gravity="center|center_horizontal|center_vertical"
-            android:layout_gravity="center"
             android:text="New Alert"
             android:textSize="24sp" />
 
@@ -40,7 +39,7 @@
             android:hint="Cryptocurrency">
 
             <AutoCompleteTextView
-                android:id="@+id/TextViewAddAlert"
+                android:id="@+id/addAlertCryptocurrency"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -67,10 +66,10 @@
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="8dp"
             android:ellipsize="start"
-            android:hint="Amount">
+            android:hint="Target">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/fiatAmountTextInputEditText"
+                android:id="@+id/addAlertAmount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -82,8 +81,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="horizontal">
-
-
 
 
                 <Button
@@ -108,6 +105,7 @@
                     android:text="Add Alert"
                     android:textColor="@color/white"
                     app:backgroundTint="@color/blueTheme" />
+
             </LinearLayout>
 
         </com.google.android.material.textfield.TextInputLayout>

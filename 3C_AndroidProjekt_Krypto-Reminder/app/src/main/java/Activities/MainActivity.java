@@ -1,4 +1,4 @@
-package rafaelp.gt.a3c_androidprojekt_krypto_reminder;
+package Activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -8,19 +8,19 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -30,11 +30,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
-public class MainActivity extends AppCompatActivity {
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Alert;
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Coin;
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.CryptocurrencyServerTask;
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.FiatCurrencyServerTask;
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.FiatFromUser;
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.RightActivity;
 
+public class MainActivity extends AppCompatActivity implements LeftFragment.OnSelectionChangedListener {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
+    private RightFragment rightFragment;
+    private boolean showRight = false;
     private static final int RQ_ACCESS_FINE_LOCATION = 123;
     private boolean isGpsAllowed = false;
     private LocationListener locationListener;
@@ -44,6 +54,14 @@ public class MainActivity extends AppCompatActivity {
     private FiatFromUser ffu;
     protected ArrayList<Coin> coins;
     private static MainActivity instance;
+
+    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String FIAT = "fiat";
+    public static final String FIATSYMBOL = "fiatsymbol";
+
+    public static String fiat;
+    public static String fiat_symbol;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +83,16 @@ public class MainActivity extends AppCompatActivity {
         registerSystemService();
         checkPermissionGPS();
 
-        TextView tv = findViewById(R.id.testtest);
-        coins = getCoins(100,"EUR");
+        initializeView();
+
+        coins = getCoins(100, "EUR");
+
+
         //tv.setText(coins.toString());
 
 
-        TextView testView = findViewById(R.id.testtesttest);
+        //saveData();
+        //loadData();
 
 
         // Declaration and setting of BottomNavigationBar
@@ -249,18 +271,14 @@ public class MainActivity extends AppCompatActivity {
         lat = Math.round(latNoDez * 1000) / 1000.0;
         lon = Math.round(lonNoDez * 1000) / 1000.0;
 
-        /*TextView testView = findViewById(R.id.testtesttest);
 
-        if (ffu == null) {
+       /* if (ffu == null) {
             ffu = getFiat(lat, lon);
             testView.setText(ffu.toString());
 
         } else {
             testView.setText(ffu.toString());
-        }
-        */
-         
-
+        }*/
 
 
     }
@@ -310,9 +328,48 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public static MainActivity getInstance()
-    {
+    public static MainActivity getInstance() {
         return instance;
+    }
+
+    public void saveData() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(FIAT, ffu.getCode());
+        editor.putString(FIATSYMBOL, ffu.getSymbol());
+
+        editor.apply();
+    }
+
+    public void loadData() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        fiat = sharedPreferences.getString(FIAT, "");
+        fiat_symbol = sharedPreferences.getString(FIATSYMBOL, "");
+
+    }
+
+
+    private void initializeView() {
+        Log.d(TAG, "initializeView: entered");
+        rightFragment = (RightFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.fragRight);
+        showRight = rightFragment != null && rightFragment.isInLayout();
+    }
+
+
+    private void callRightActivity(int pos, String alert) {
+        Log.d(TAG, "callRightActivity: entered");
+        Intent intent = new Intent(this, RightActivity.class);
+        intent.putExtra("pos", pos);
+        intent.putExtra("alert", alert);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onSelectionChanged(int pos, Alert alert) {
+        if (showRight) rightFragment.show(pos, alert.toString());
+        else callRightActivity(pos, alert.toString());
     }
 
 
