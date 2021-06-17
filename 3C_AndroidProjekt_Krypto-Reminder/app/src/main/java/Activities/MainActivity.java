@@ -56,11 +56,8 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
     private static MainActivity instance;
 
     public static final String SHARED_PREFS = "sharedPrefs";
-    public static final String FIAT = "fiat";
-    public static final String FIATSYMBOL = "fiatsymbol";
-
-    public static String fiat;
-    public static String fiat_symbol;
+    public static final String FIATNAME = "fiatname";
+    protected String fiatname;
 
 
     @Override
@@ -85,14 +82,8 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
 
         initializeView();
 
-        coins = getCoins(100, "EUR");
-
-
-        //tv.setText(coins.toString());
-
-
-        //saveData();
-        //loadData();
+        loadData();
+        coins = getCoins(100, fiatname);
 
 
         // Declaration and setting of BottomNavigationBar
@@ -332,23 +323,6 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
         return instance;
     }
 
-    public void saveData() {
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        editor.putString(FIAT, ffu.getCode());
-        editor.putString(FIATSYMBOL, ffu.getSymbol());
-
-        editor.apply();
-    }
-
-    public void loadData() {
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        fiat = sharedPreferences.getString(FIAT, "");
-        fiat_symbol = sharedPreferences.getString(FIATSYMBOL, "");
-
-    }
-
 
     private void initializeView() {
         Log.d(TAG, "initializeView: entered");
@@ -372,5 +346,13 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
         else callRightActivity(pos, alert.toString());
     }
 
+    public void loadData() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        fiatname = sharedPreferences.getString(FIATNAME, "");
 
+    }
+
+    public String getFiatname() {
+        return fiatname;
+    }
 }

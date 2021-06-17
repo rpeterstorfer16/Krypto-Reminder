@@ -181,7 +181,7 @@ public class ConverterActivity extends AppCompatActivity {
 
         ArrayList<Coin> coinsWithUserFiat;
 
-        coinsWithUserFiat = ma.getCoins(100, currency);
+        coinsWithUserFiat = ma.coins;
 
         Coin coin = null;
         for (Coin c : coinsWithUserFiat) {

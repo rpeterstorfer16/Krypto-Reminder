@@ -1,6 +1,7 @@
 package Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.MenuItem;
@@ -27,6 +28,10 @@ public class AddAlertActivity extends AppCompatActivity {
 
     MainActivity ma = MainActivity.getInstance();
     ArrayList<Coin> coins;
+    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String FIATNAME = "fiat";
+
+    public static String fiatname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +49,7 @@ public class AddAlertActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(AddAlertActivity.this, SettingsActivity.class));
-                overridePendingTransition(0,0);
+                overridePendingTransition(0, 0);
 
                 int duration = Toast.LENGTH_SHORT;
 
@@ -55,6 +60,8 @@ public class AddAlertActivity extends AppCompatActivity {
 
         BottomNavigationView bnv = findViewById(R.id.bottom_navigation);
 
+
+
         bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -63,7 +70,7 @@ public class AddAlertActivity extends AppCompatActivity {
                     case R.id.page_1:
                         Intent intent = new Intent(AddAlertActivity.this, TransactionActivity.class);
                         startActivity(intent);
-                        overridePendingTransition(0,0);
+                        overridePendingTransition(0, 0);
 
                         break;
 
@@ -71,14 +78,14 @@ public class AddAlertActivity extends AppCompatActivity {
                     case R.id.page_2:
                         Intent intent1 = new Intent(AddAlertActivity.this, MainActivity.class);
                         startActivity(intent1);
-                        overridePendingTransition(0,0);
+                        overridePendingTransition(0, 0);
 
                         break;
 
                     case R.id.page_3:
                         Intent intent2 = new Intent(AddAlertActivity.this, ConverterActivity.class);
                         startActivity(intent2);
-                        overridePendingTransition(0,0);
+                        overridePendingTransition(0, 0);
 
                         break;
                 }
@@ -89,12 +96,11 @@ public class AddAlertActivity extends AppCompatActivity {
         });
 
 
-
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(AddAlertActivity.this, MainActivity.class));
-                overridePendingTransition(0,0);
+                overridePendingTransition(0, 0);
 
                 int duration = Toast.LENGTH_SHORT;
 
@@ -116,20 +122,18 @@ public class AddAlertActivity extends AppCompatActivity {
                 String cryptocurrency = String.valueOf(cryptocurrencyTextView.getText());
                 double amount = Double.parseDouble(amountTextView.getText().toString());
 
-                for(Coin c : coins)
-                {
+                for (Coin c : coins) {
                     String coin = c.getCoinName();
-                    if(coin.equals(cryptocurrency)) selectedCoin = c;
+                    if (coin.equals(cryptocurrency)) selectedCoin = c;
                 }
 
 
-                Alert alert = new Alert(selectedCoin.getCoinName(), selectedCoin.getCurrentPrice(),amount,selectedCoin.getPriceChangedIn24(),selectedCoin.getMarketCap(),selectedCoin.getIconLink());
+                Alert alert = new Alert(selectedCoin.getCoinName(), selectedCoin.getCurrentPrice(), amount, selectedCoin.getPriceChangedIn24(), selectedCoin.getMarketCap(), selectedCoin.getIconLink());
 
-                Intent intent = new Intent(AddAlertActivity.this,MainActivity.class);
+                Intent intent = new Intent(AddAlertActivity.this, MainActivity.class);
                 intent.putExtra("newAlert", (Serializable) alert);
                 startActivity(intent);
-                overridePendingTransition(0,0);
-
+                overridePendingTransition(0, 0);
 
 
                 int duration = Toast.LENGTH_SHORT;
@@ -139,36 +143,17 @@ public class AddAlertActivity extends AppCompatActivity {
         });
     }
 
-    public void fillInputLayout()
-    {
+    public void fillInputLayout() {
         coins = ma.coins;
         String[] coinsForView = new String[coins.size()];
         int i = 0;
-        for(Coin coinStrings : coins)
-        {
+        for (Coin coinStrings : coins) {
             coinsForView[i] = coinStrings.getCoinName();
             i++;
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, coinsForView);
         AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.addAlertCryptocurrency);
         textView.setAdapter(adapter);
-    }
-
-    public void addAlert()
-    {
-        AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.addAlertCryptocurrency);
-        String cryptocurrency = "";
-        if (!String.valueOf(textView.getText()).equals("")) {
-            cryptocurrency = String.valueOf(textView.getText());
-        }
-
-        TextView tv = findViewById(R.id.addAlertAmount);
-        double amount = Double.parseDouble(String.valueOf(tv.getText()));
-
-
-
-        //ArrayList<Coin> coins = getCoins(100,);
-
     }
 
 

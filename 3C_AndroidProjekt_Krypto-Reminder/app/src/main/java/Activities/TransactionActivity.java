@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
@@ -20,21 +21,18 @@ import java.util.List;
 
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Transaction;
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.TransactionRowAdapter;
 
 public class TransactionActivity extends AppCompatActivity {
     private static List<Transaction> transactions = new ArrayList<>();
     private ListView mListView;
-    private ArrayAdapter<Transaction> mAdapter;
+    private TransactionRowAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction);
 
-        mListView = findViewById(R.id.transactionListView);
-        fillItemsList();
-        bindAdapterToListView(mListView);
-        mAdapter.notifyDataSetChanged();
 
         BottomNavigationView bnv = findViewById(R.id.bottom_navigation);
 
@@ -50,6 +48,12 @@ public class TransactionActivity extends AppCompatActivity {
 
             }
         });
+
+        fillItemsList();
+
+        mListView = findViewById(R.id.transactionListView);
+        bindAdapterToListView(mListView);
+        mAdapter.notifyDataSetChanged();
 
 
         bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -77,6 +81,7 @@ public class TransactionActivity extends AppCompatActivity {
 
         });
 
+
         //Animation for FloatingActionButton
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.floating_action_button);
@@ -97,7 +102,7 @@ public class TransactionActivity extends AppCompatActivity {
     }
 
     private void bindAdapterToListView(ListView lv) {
-        mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, transactions);
+        mAdapter = new TransactionRowAdapter(this, R.layout.transactionlistviewlayout, transactions);
         lv.setAdapter(mAdapter);
     }
 

@@ -68,7 +68,7 @@
             android:inputType="none">
 
             <AutoCompleteTextView
-                android:id="@+id/TextViewCryptocurrency"
+                android:id="@+id/textViewCryptocurrency"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
@@ -87,18 +87,30 @@
                     android:layout_marginRight="12dp"
                     android:layout_weight="1"
                     android:background="@drawable/round_buttons2"
-                    android:text="Back"
+                    android:text="Cancel"
                     app:backgroundTint="@color/lightgrey" />
 
                 <Button
-                    android:id="@+id/saveTransactionButton"
+                    android:id="@+id/sellTransactionButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="12dp"
                     android:layout_marginTop="12dp"
                     android:layout_weight="1"
                     android:background="@drawable/round_buttons"
-                    android:text="Save"
+                    android:text="Sell"
+                    android:textColor="@color/white"
+                    app:backgroundTint="@color/blueTheme" />
+
+                <Button
+                    android:id="@+id/buyTransactionButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/round_buttons"
+                    android:text="Buy"
                     android:textColor="@color/white"
                     app:backgroundTint="@color/blueTheme" />
 

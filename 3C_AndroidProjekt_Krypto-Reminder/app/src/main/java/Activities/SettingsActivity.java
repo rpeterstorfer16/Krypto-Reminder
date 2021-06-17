@@ -1,10 +1,25 @@
 package Activities;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -13,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.FiatCurrencyServerTask;
@@ -22,13 +38,53 @@ import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
 public class SettingsActivity extends AppCompatActivity {
 
     ArrayList<FiatFromUser> currencies;
+    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String FIATNAME = "fiatname";
+    private FiatFromUser ffu;
+
+    private static final int RQ_ACCESS_FINE_LOCATION = 123;
+    private boolean isGpsAllowed = false;
+    private LocationListener locationListener;
+    private LocationManager locationManager;
+    private double lat;
+    private double lon;
+
+    public static String fiatname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        loadData();
         fillSpinner();
+        registerSystemService();
+        checkPermissionGPS();
+
+
+        Button applyButton = findViewById(R.id.applySettingsButton);
+
+        applyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Spinner fiatSpinner = findViewById(R.id.settingsSpinner);
+
+                String fiat = fiatSpinner.getSelectedItem().toString();
+
+                if (fiat.equals("Currency from GPS location")) {
+                    ffu = getFiatGPS(lat, lon);
+                    saveData();
+
+                } else {
+                    getFiatSpinner(fiat);
+                    saveData();
+
+
+                }
+            }
+        });
+
 
         BottomNavigationView bnv = findViewById(R.id.bottom_navigation);
         bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -65,26 +121,50 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
-    public void fillSpinner() {
-        MainActivity ma = MainActivity.getInstance();
+    public void getFiatSpinner(String name) {
+        currencies = getFiats();
 
-        currencies = getCurrency();
-        String[] currenciesForView = new String[currencies.size()+1];
-        int j = 1;
-        currenciesForView[0] = "Currency from GPS location";
-        for (FiatFromUser currenciesStrings : currencies) {
-            currenciesForView[j] = currenciesStrings.getName();
-            j++;
+        for (FiatFromUser fiat : currencies) {
+            if (fiat.getName().equals(name)) {
+                ffu = fiat;
+            }
+        }
+    }
+
+    public void fillSpinner() {
+        currencies = getFiats();
+
+        String[] currenciesForView;
+        if (fiatname != null) {
+            currenciesForView = new String[currencies.size() + 2];
+
+            int j = 2;
+            currenciesForView[0] = fiatname;
+            currenciesForView[1] = "Currency from GPS location";
+            for (FiatFromUser currenciesStrings : currencies) {
+                currenciesForView[j] = currenciesStrings.getName();
+                j++;
+            }
+        } else {
+            currenciesForView = new String[currencies.size() + 1];
+
+            int k = 1;
+            currenciesForView[0] = "Currency from GPS location";
+            for (FiatFromUser currenciesStrings : currencies) {
+                currenciesForView[k] = currenciesStrings.getName();
+                k++;
+            }
         }
 
-        /*ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, currenciesForView);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, currenciesForView);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         Spinner sItems = (Spinner) findViewById(R.id.settingsSpinner);
-        sItems.setAdapter(adapter);*/
+        sItems.setAdapter(adapter);
     }
 
-    public ArrayList<FiatFromUser> getCurrency() {
+    public ArrayList<FiatFromUser> getFiats() {
         String currency = "";
         currencies = new ArrayList<>();
 
@@ -121,4 +201,152 @@ public class SettingsActivity extends AppCompatActivity {
         return currencies;
 
     }
+
+
+    private void registerSystemService() {
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        // from Api 23 and above you can call getSystemService this way:
+        // locationManager = (LocationManager) getSystemService(LocationManager.class);
+    }
+
+    private void checkPermissionGPS() {
+        String permission = Manifest.permission.ACCESS_FINE_LOCATION;
+        if (ActivityCompat.checkSelfPermission(this, permission)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{permission},
+                    RQ_ACCESS_FINE_LOCATION);
+        } else {
+            gpsGranted();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode != RQ_ACCESS_FINE_LOCATION) return;
+        if (grantResults.length > 0 &&
+                grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+        } else {
+            gpsGranted();
+        }
+    }
+
+    private void gpsGranted() {
+        isGpsAllowed = true;
+        locationListener = new LocationListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onLocationChanged(Location location) {
+                displayLocation(location);
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+            }
+        };
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    protected void onResume() {
+        super.onResume();
+        super.onPostResume();
+        if (isGpsAllowed) {
+            locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    400000,
+                    2000,
+                    locationListener);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (isGpsAllowed) locationManager.removeUpdates(locationListener);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void displayLocation(Location location) {
+        double latNoDez = location == null ? -1 : location.getLatitude();
+        double lonNoDez = location == null ? -1 : location.getLongitude();
+
+
+        lat = Math.round(latNoDez * 1000) / 1000.0;
+        lon = Math.round(lonNoDez * 1000) / 1000.0;
+
+
+
+
+    }
+
+    public FiatFromUser getFiatGPS(double latitute, double longitute) {
+        String coin = "";
+        String accessKey = "5fdb5f6c40e83447a40ea1615831570c";
+        FiatFromUser fiatFromUser = null;
+
+
+        FiatCurrencyServerTask task = new FiatCurrencyServerTask();
+        try {
+
+            String result = task.execute("http://api.positionstack.com/v1/reverse?" + "access_key=" + accessKey + "&query=" + latitute + "," + longitute + "&country_module=1").get();
+            JSONObject js = new JSONObject(result);
+
+            JSONArray ja = js.getJSONArray("data");
+
+            JSONObject js2 = ja.getJSONObject(0);
+
+            JSONObject js3 = js2.getJSONObject("country_module");
+
+            JSONArray jsArray = js3.getJSONArray("currencies");
+
+            JSONObject jsonObject = jsArray.getJSONObject(0);
+            coin += jsonObject.getString("symbol");
+            coin += ";";
+            coin += jsonObject.getString("code");
+            coin += ";";
+            coin += jsonObject.getString("name");
+
+
+            String[] coinArray = coin.split(";");
+
+            fiatFromUser = new FiatFromUser(coinArray[0], coinArray[1], coinArray[2]);
+
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return fiatFromUser;
+
+    }
+
+    public void saveData() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(FIATNAME, ffu.getName());
+
+        editor.apply();
+    }
+
+    public void loadData() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        fiatname = sharedPreferences.getString(FIATNAME, "");
+
+    }
+
 }
