@@ -128,7 +128,7 @@ public class AddAlertActivity extends AppCompatActivity {
                 }
 
 
-                Alert alert = new Alert(selectedCoin.getCoinName(), selectedCoin.getCurrentPrice(), amount, selectedCoin.getPriceChangedIn24(), selectedCoin.getMarketCap(), selectedCoin.getIconLink());
+                Alert alert = new Alert(selectedCoin.getCoinName(),ma.fiatname, selectedCoin.getCurrentPrice(), amount, selectedCoin.getPriceChangedIn24(), selectedCoin.getMarketCap(), selectedCoin.getIconLink());
 
                 Intent intent = new Intent(AddAlertActivity.this, MainActivity.class);
                 intent.putExtra("newAlert", (Serializable) alert);

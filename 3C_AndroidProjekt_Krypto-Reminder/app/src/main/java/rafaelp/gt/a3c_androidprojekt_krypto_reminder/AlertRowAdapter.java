@@ -31,8 +31,6 @@ public class AlertRowAdapter extends BaseAdapter {
         this.inflater = (LayoutInflater) ctx.getSystemService(LAYOUT_INFLATER_SERVICE);
     }
 
-
-
     @Override
     public int getCount() {
         return alerts.size();
@@ -48,17 +46,16 @@ public class AlertRowAdapter extends BaseAdapter {
         return 0;
     }
 
-
-
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        MainActivity ma = MainActivity.getInstance();
         Alert alert = alerts.get(i);
         View listItem = (view == null) ? inflater.inflate(this.layoutId, null) : view;
         ImageView iv = listItem.findViewById(R.id.transactionRowImageView);
         Picasso.get().load(alert.getCryptoIcon()).into(iv);
         ((TextView) listItem.findViewById(R.id.transactionRowCoinNameTextView)).setText(alert.getCoinName());
-        ((TextView) listItem.findViewById(R.id.rowTransactionTargetTextView)).setText("Alert at: " + (alert.getPriceAlert()) + " "+ma.getFiatname());
+        ((TextView) listItem.findViewById(R.id.rowTransactionTargetTextView)).setText("Alert at: " + alert.getPriceAlert() + " " + alert.getCurrency());
+        ((TextView) listItem.findViewById(R.id.rowTransactionCurrentPriceTextView)).setText("Current price: " + alert.getCurrentPrice() + " " + alert.getCurrency());
+
         return listItem;
     }
 }

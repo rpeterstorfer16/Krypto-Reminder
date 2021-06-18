@@ -7,14 +7,16 @@ import java.io.Serializable;
 
 public class Alert implements Serializable {
     private String coinName;
+    private String currency;
     private double currentPrice;
     private double priceAlert;
     private double priceChanged;
     private double marketCap;
     private String cryptoIcon;
 
-    public Alert(String coinName, double currentPrice, double priceAlert, double priceChanged, double marketCap, String cryptoIcon) {
+    public Alert(String coinName,String currency, double currentPrice, double priceAlert, double priceChanged, double marketCap, String cryptoIcon) {
         this.coinName = coinName;
+        this.currency = currency;
         this.currentPrice = currentPrice;
         this.priceAlert = priceAlert;
         this.priceChanged = priceChanged;
@@ -70,15 +72,7 @@ public class Alert implements Serializable {
         this.cryptoIcon = cryptoIcon;
     }
 
-    @Override
-    public String toString() {
-        return "Alert{" +
-                "coinName='" + coinName + '\'' +
-                ", currentPrice=" + currentPrice +
-                ", priceAlert=" + priceAlert +
-                ", priceChanged=" + priceChanged +
-                ", marketCap=" + marketCap +
-                ", cryptoIcon='" + cryptoIcon + '\'' +
-                '}';
+    public String getCurrency() {
+        return currency;
     }
 }

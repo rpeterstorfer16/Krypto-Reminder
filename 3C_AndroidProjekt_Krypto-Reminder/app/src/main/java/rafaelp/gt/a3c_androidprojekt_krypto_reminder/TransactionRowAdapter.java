@@ -25,12 +25,11 @@ public class TransactionRowAdapter extends BaseAdapter {
     private LayoutInflater inflater;
 
 
-    public TransactionRowAdapter(Context ctx, int layoutId, List<Transaction> alerts) {
-        this.transactions = (ArrayList<Transaction>) alerts;
+    public TransactionRowAdapter(Context ctx, int layoutId, List<Transaction> transactions) {
+        this.transactions = (ArrayList<Transaction>) transactions;
         this.layoutId = layoutId;
         this.inflater = (LayoutInflater) ctx.getSystemService(LAYOUT_INFLATER_SERVICE);
     }
-
 
 
     @Override
@@ -49,15 +48,16 @@ public class TransactionRowAdapter extends BaseAdapter {
     }
 
 
-
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         Transaction transaction = transactions.get(i);
         View listItem = (view == null) ? inflater.inflate(this.layoutId, null) : view;
         ImageView iv = listItem.findViewById(R.id.transactionRowImageView);
         Picasso.get().load(transaction.getIconLink()).into(iv);
-        ((TextView) listItem.findViewById(R.id.rowTransactionAmountAndCoinnameView)).setText(transaction.getAmountOfCoins()+transaction.getCoinName());
-        ((TextView) listItem.findViewById(R.id.rowTransactionTargetTextView)).setText(transaction.getTypeOfTransaction() + " am " + transaction.getDate());
+        ((TextView) listItem.findViewById(R.id.rowTransactionAmountAndCoinnameView)).setText(transaction.getAmountOfCoins() + " "+transaction.getCoinName());
+        ((TextView) listItem.findViewById(R.id.rowTransactionTransactionAndDateView)).setText(transaction.getTypeOfTransaction() + " am " + transaction.getDate());
+
+
         return listItem;
     }
 }

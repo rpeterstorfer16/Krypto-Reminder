@@ -25,7 +25,6 @@ public class LeftFragment extends Fragment {
     private ListView list;
     private static ArrayList<Alert> alerts = new ArrayList<>();
     private OnSelectionChangedListener listener;
-    private ListView mListView;
     private AlertRowAdapter mAdapter;
 
     @Override
@@ -57,11 +56,10 @@ public class LeftFragment extends Fragment {
     public void onStart() {
         Log.d(TAG, "onStart: entered");
         super.onStart();
-        //final ArrayAdapter<Alert> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, alerts);
-        //list.setAdapter(adapter);
-
-        mAdapter = new AlertRowAdapter(getContext(), R.layout.alertlistviewlayout, alerts);
+        mAdapter = new AlertRowAdapter(this.getContext(),R.layout.alertlistviewlayout,alerts);
         list.setAdapter(mAdapter);
+
+
     }
 
     public interface OnSelectionChangedListener {
@@ -83,8 +81,6 @@ public class LeftFragment extends Fragment {
         Alert alert = alerts.get(position);
         listener.onSelectionChanged(position, alert);
     }
-
-
 
 
 }

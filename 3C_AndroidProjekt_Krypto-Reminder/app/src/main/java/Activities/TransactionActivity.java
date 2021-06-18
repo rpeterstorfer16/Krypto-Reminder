@@ -19,6 +19,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.AlertRowAdapter;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Transaction;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.TransactionRowAdapter;
@@ -33,9 +34,9 @@ public class TransactionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction);
 
-
         BottomNavigationView bnv = findViewById(R.id.bottom_navigation);
 
+        fillItemsList();
         bnv.setSelectedItemId(R.id.page_1);
 
         ImageButton settingsButton = findViewById(R.id.settingsButton);
@@ -45,15 +46,17 @@ public class TransactionActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(TransactionActivity.this, SettingsActivity.class));
                 overridePendingTransition(0, 0);
-
             }
         });
 
-        fillItemsList();
 
-        mListView = findViewById(R.id.transactionListView);
-        bindAdapterToListView(mListView);
-        mAdapter.notifyDataSetChanged();
+        if(transactions != null)
+        {
+            mAdapter = new TransactionRowAdapter(this, R.layout.transactionlistviewlayout, transactions);
+            mListView = findViewById(R.id.transactionListView);
+            mListView.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
+        }
 
 
         bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -93,24 +96,20 @@ public class TransactionActivity extends AppCompatActivity {
             public void onClick(View view) {
                 fab.startAnimation(rotateForward);
 
-
                 startActivity(new Intent(TransactionActivity.this, AddTransactionActivity.class));
-
 
             }
         });
     }
 
-    private void bindAdapterToListView(ListView lv) {
-        mAdapter = new TransactionRowAdapter(this, R.layout.transactionlistviewlayout, transactions);
-        lv.setAdapter(mAdapter);
-    }
 
     private void fillItemsList() {
         Intent intent = getIntent();
-        Transaction transaction = (Transaction) intent.getSerializableExtra("transaction");
-        transactions.add(transaction);
-
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            Transaction transaction = (Transaction) bundle.getSerializable("transaction");
+            transactions.add(transaction);
+        }
     }
 }
 

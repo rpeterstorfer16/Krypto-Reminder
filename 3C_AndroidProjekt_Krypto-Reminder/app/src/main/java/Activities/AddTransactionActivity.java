@@ -32,7 +32,6 @@ public class AddTransactionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_transaction);
 
         Button cancelButton = findViewById(R.id.cancelTransactionButton);
-        Button addTransactionButton = findViewById(R.id.applySettingsButton);
 
         fillInputLayout();
 
@@ -63,7 +62,7 @@ public class AddTransactionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 MainActivity ma = MainActivity.getInstance();
-                AutoCompleteTextView addAlertAmount = findViewById(R.id.addAlertAmount);
+                TextInputEditText addAlertAmount = findViewById(R.id.addAlertAmount);
                 double amount = Double.parseDouble(String.valueOf(addAlertAmount.getText()));
 
                 TextView AddTransactionCryptocurrency = findViewById(R.id.textViewCryptocurrency);
@@ -77,7 +76,7 @@ public class AddTransactionActivity extends AppCompatActivity {
                 }
                 SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
-                Transaction transaction = new Transaction("Verkauft",amount, selectedCoin.getCoinName(), selectedCoin.getIconLink(), sdf.format(new Date()));
+                Transaction transaction = new Transaction("Verkauft",amount, selectedCoin.getCoinName().substring(0, 1).toUpperCase() + selectedCoin.getCoinName().substring(1).toLowerCase(), selectedCoin.getIconLink(), sdf.format(new Date()));
 
                 Intent intent = new Intent(AddTransactionActivity.this, TransactionActivity.class);
                 intent.putExtra("transaction", (Serializable) transaction);
@@ -97,7 +96,7 @@ public class AddTransactionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 MainActivity ma = MainActivity.getInstance();
-                AutoCompleteTextView addAlertAmount = findViewById(R.id.addAlertAmount);
+                TextInputEditText addAlertAmount = findViewById(R.id.addAlertAmount);
                 double amount = Double.parseDouble(String.valueOf(addAlertAmount.getText()));
 
                 TextView AddTransactionCryptocurrency = findViewById(R.id.textViewCryptocurrency);
@@ -112,7 +111,7 @@ public class AddTransactionActivity extends AppCompatActivity {
 
                 SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
-                Transaction transaction = new Transaction("Gekauft",amount, selectedCoin.getCoinName(), selectedCoin.getIconLink(), sdf.format(new Date()));
+                Transaction transaction = new Transaction("Gekauft",amount, selectedCoin.getCoinName().substring(0, 1).toUpperCase() + selectedCoin.getCoinName().substring(1).toLowerCase(), selectedCoin.getIconLink(), sdf.format(new Date()));
 
                 Intent intent = new Intent(AddTransactionActivity.this, TransactionActivity.class);
                 intent.putExtra("transaction", (Serializable) transaction);
