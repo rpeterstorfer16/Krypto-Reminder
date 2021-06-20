@@ -18,11 +18,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Alert;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Coin;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Status;
 
 public class AddAlertActivity extends AppCompatActivity {
 
@@ -32,12 +35,13 @@ public class AddAlertActivity extends AppCompatActivity {
     public static final String FIATNAME = "fiat";
 
     public static String fiatname;
+    public static boolean saved;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_alerts);
-
+        saved=true;
         Button cancelButton = findViewById(R.id.cancelButton);
         Button addAlertButton = findViewById(R.id.addAlertButton);
 
@@ -59,7 +63,6 @@ public class AddAlertActivity extends AppCompatActivity {
         });
 
         BottomNavigationView bnv = findViewById(R.id.bottom_navigation);
-
 
 
         bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -121,15 +124,23 @@ public class AddAlertActivity extends AppCompatActivity {
                 Coin selectedCoin = null;
                 String cryptocurrency = String.valueOf(cryptocurrencyTextView.getText());
                 double amount = Double.parseDouble(amountTextView.getText().toString());
+                String higherLower = null;
 
                 for (Coin c : coins) {
                     String coin = c.getCoinName();
                     if (coin.equals(cryptocurrency)) selectedCoin = c;
                 }
 
+                if (selectedCoin.getCurrentPrice() > amount) {
+                    higherLower = "lower";
+                } else if (selectedCoin.getCurrentPrice() < amount) {
+                    higherLower = "higher";
+                }
 
-                Alert alert = new Alert(selectedCoin.getCoinName(),ma.fiatname, selectedCoin.getCurrentPrice(), amount, selectedCoin.getPriceChangedIn24(), selectedCoin.getMarketCap(), selectedCoin.getIconLink());
-
+                DecimalFormat f = new DecimalFormat();
+                f.setMaximumFractionDigits(4);
+                Alert alert = new Alert(selectedCoin.getCoinName().substring(0, 1).toUpperCase() + selectedCoin.getCoinName().substring(1).toLowerCase(), ma.fiatname, higherLower, Math.floor(selectedCoin.getCurrentPrice() * 100) / 100 , amount, selectedCoin.getPriceChangedIn24(), selectedCoin.getMarketCap(), selectedCoin.getIconLink(), Status.ACTIVE);
+                saved=true;
                 Intent intent = new Intent(AddAlertActivity.this, MainActivity.class);
                 intent.putExtra("newAlert", (Serializable) alert);
                 startActivity(intent);

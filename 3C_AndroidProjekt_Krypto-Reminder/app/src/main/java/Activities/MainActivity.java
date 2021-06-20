@@ -33,12 +33,13 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Alert;
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.AlertService;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Coin;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.CryptocurrencyServerTask;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.FiatCurrencyServerTask;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.FiatFromUser;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.RightActivity;
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.DetailedActivity;
 
 public class MainActivity extends AppCompatActivity implements LeftFragment.OnSelectionChangedListener {
 
@@ -73,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                 overridePendingTransition(0, 0);
-
             }
         });
 
@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
 
         Animation rotateForward = AnimationUtils.loadAnimation(this, R.anim.fab_rotate_forward);
 
+        //startService();
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
 
             }
         });
+        startService();
 
 
     }
@@ -274,50 +276,6 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
 
     }
 
-    public FiatFromUser getFiat(double latitute, double longitute) {
-        String coin = "";
-        String accessKey = "5fdb5f6c40e83447a40ea1615831570c";
-        FiatFromUser fiatFromUser = null;
-
-
-        FiatCurrencyServerTask task = new FiatCurrencyServerTask();
-        try {
-
-            String result = task.execute("http://api.positionstack.com/v1/reverse?" + "access_key=" + accessKey + "&query=" + latitute + "," + longitute + "&country_module=1").get();
-            JSONObject js = new JSONObject(result);
-
-            JSONArray ja = js.getJSONArray("data");
-
-            JSONObject js2 = ja.getJSONObject(0);
-
-            JSONObject js3 = js2.getJSONObject("country_module");
-
-            JSONArray jsArray = js3.getJSONArray("currencies");
-
-            JSONObject jsonObject = jsArray.getJSONObject(0);
-            coin += jsonObject.getString("symbol");
-            coin += ";";
-            coin += jsonObject.getString("code");
-            coin += ";";
-            coin += jsonObject.getString("name");
-
-
-            String[] coinArray = coin.split(";");
-
-            fiatFromUser = new FiatFromUser(coinArray[0], coinArray[1], coinArray[2]);
-
-
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return fiatFromUser;
-
-    }
 
     public static MainActivity getInstance() {
         return instance;
@@ -334,7 +292,7 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
 
     private void callRightActivity(int pos, String alert) {
         Log.d(TAG, "callRightActivity: entered");
-        Intent intent = new Intent(this, RightActivity.class);
+        Intent intent = new Intent(this, DetailedActivity.class);
         intent.putExtra("pos", pos);
         intent.putExtra("alert", alert);
         startActivity(intent);
@@ -349,10 +307,32 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
     public void loadData() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         fiatname = sharedPreferences.getString(FIATNAME, "");
-
     }
 
     public String getFiatname() {
         return fiatname;
     }
+
+    public void startService() {
+        LeftFragment lf = LeftFragment.getInstance();
+        Log.d(TAG, "startService: entered");
+        Intent intent = new Intent(this, AlertService.class);
+
+        if (lf.getAlerts() != null) {
+            intent.putExtra("alerts", lf.getAlerts());
+            startService(intent);
+        }
+
+    }
+
+
+
+    /*public void stopService(View view) {
+        Log.d(TAG, "stopService: entered");
+        Intent intent = new Intent(this, AlertService.class);
+        stopService(intent);
+    }*/
+
+
 }
+

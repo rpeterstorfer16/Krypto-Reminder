@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.3C_AndroidPorjekt_KryptoReminder"
         android:usesCleartextTraffic="true">
-        <activity android:name=".RightActivity"></activity>
+        <activity android:name=".DetailedActivity"></activity>
         <activity android:name="Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,6 +27,7 @@
         <activity android:name="Activities.ConverterActivity" />
         <activity android:name="Activities.SettingsActivity" />
         <activity android:name="Activities.AddTransactionActivity"/>
+        <service android:name=".AlertService"/>
     </application>
 
 </manifest>

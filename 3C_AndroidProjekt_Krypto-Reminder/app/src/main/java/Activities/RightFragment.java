@@ -35,7 +35,7 @@ public class RightFragment extends Fragment {
 
     public void show(int pos, String item) {
         Log.d(TAG, "show: entered");
-        txt1.setText(""+pos);
+        //txt1.setText(""+pos);
         txt2.setText(item);
     }
 

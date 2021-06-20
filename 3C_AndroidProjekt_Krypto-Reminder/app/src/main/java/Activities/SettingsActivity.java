@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Alert;
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Coin;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.FiatCurrencyServerTask;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.FiatFromUser;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
@@ -48,6 +50,7 @@ public class SettingsActivity extends AppCompatActivity {
     private LocationManager locationManager;
     private double lat;
     private double lon;
+    private MainActivity ma;
 
     public static String fiatname;
 
@@ -58,9 +61,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         loadData();
         fillSpinner();
-        registerSystemService();
-        checkPermissionGPS();
 
+        ma = MainActivity.getInstance();
 
         Button applyButton = findViewById(R.id.applySettingsButton);
 
@@ -71,17 +73,62 @@ public class SettingsActivity extends AppCompatActivity {
                 Spinner fiatSpinner = findViewById(R.id.settingsSpinner);
 
                 String fiat = fiatSpinner.getSelectedItem().toString();
+                LeftFragment lf = LeftFragment.getInstance();
 
                 if (fiat.equals("Currency from GPS location")) {
+                    registerSystemService();
+                    checkPermissionGPS();
                     ffu = getFiatGPS(lat, lon);
                     saveData();
 
+                    ArrayList<Coin> coins = ma.getCoins(100, ffu.getName());
+
+
+                    for (int i = 0; i < lf.alerts.size(); i++) {
+                        Alert alert = lf.alerts.get(i);
+                        for (Coin c : coins)
+                            if (alert.getCoinName().equals(c.getCoinName().substring(0, 1).toUpperCase() + c.getCoinName().substring(1).toLowerCase())) {
+                                alert.setCurrency(ffu.getName());
+                                alert.setCurrentPrice(c.getCurrentPrice());
+                                lf.alerts.set(i, alert);
+                                lf.mAdapter.notifyDataSetChanged();
+                            }
+
+                    }
                 } else {
                     getFiatSpinner(fiat);
                     saveData();
 
+                    ArrayList<Coin> coins = ma.getCoins(100, ffu.getName());
+
+                    for (int i = 0; i < lf.alerts.size(); i++) {
+                        Alert alert = lf.alerts.get(i);
+                        for (Coin c : coins)
+                            if (alert.getCoinName().equals(c.getCoinName().substring(0, 1).toUpperCase() + c.getCoinName().substring(1).toLowerCase())) {
+                                double rate1 = 0.0;
+                                for(FiatFromUser currency : lf.getFiats())
+                                {
+
+                                    if(alert.getCurrency().equals(currency.getName()))
+                                    {
+
+                                        rate1 = Double.parseDouble(currency.getRate());
+                                    }
+                                }
+                                double amount1 = alert.getPriceAlert()/rate1;
+                                double amount2 = (amount1*Double.parseDouble(ffu.getRate()));
+                                alert.setCurrency(ffu.getName());
+                                alert.setPriceAlert(Math.floor(amount2*100/ 100));
+                                alert.setCurrentPrice(Math.floor(c.getCurrentPrice() * 100) / 100);
+                                lf.alerts.set(i, alert);
+
+                                lf.mAdapter.notifyDataSetChanged();
+                            }
+
+                    }
 
                 }
+
             }
         });
 
@@ -283,8 +330,6 @@ public class SettingsActivity extends AppCompatActivity {
 
         lat = Math.round(latNoDez * 1000) / 1000.0;
         lon = Math.round(lonNoDez * 1000) / 1000.0;
-
-
 
 
     }

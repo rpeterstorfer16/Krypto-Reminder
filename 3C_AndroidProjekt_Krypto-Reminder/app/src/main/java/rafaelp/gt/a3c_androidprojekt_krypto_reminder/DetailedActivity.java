@@ -2,6 +2,7 @@ package rafaelp.gt.a3c_androidprojekt_krypto_reminder;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Service;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -9,8 +10,8 @@ import android.util.Log;
 
 import Activities.RightFragment;
 
-public class RightActivity extends AppCompatActivity {
-    private static final String TAG = RightActivity.class.getSimpleName();
+public class DetailedActivity extends AppCompatActivity {
+    private static final String TAG = DetailedActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class RightActivity extends AppCompatActivity {
     }
 
     private void intializeViews() {
+
     }
 
 

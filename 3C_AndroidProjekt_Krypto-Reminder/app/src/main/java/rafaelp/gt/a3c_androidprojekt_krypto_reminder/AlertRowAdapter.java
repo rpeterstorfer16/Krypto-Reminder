@@ -12,6 +12,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import Activities.MainActivity;
 
@@ -51,12 +52,16 @@ public class AlertRowAdapter extends BaseAdapter {
         Alert alert = alerts.get(i);
         View listItem = (view == null) ? inflater.inflate(this.layoutId, null) : view;
         ImageView iv = listItem.findViewById(R.id.transactionRowImageView);
+
         Picasso.get().load(alert.getCryptoIcon()).into(iv);
         ((TextView) listItem.findViewById(R.id.transactionRowCoinNameTextView)).setText(alert.getCoinName());
         ((TextView) listItem.findViewById(R.id.rowTransactionTargetTextView)).setText("Alert at: " + alert.getPriceAlert() + " " + alert.getCurrency());
         ((TextView) listItem.findViewById(R.id.rowTransactionCurrentPriceTextView)).setText("Current price: " + alert.getCurrentPrice() + " " + alert.getCurrency());
 
+
         return listItem;
+
+
     }
 }
 

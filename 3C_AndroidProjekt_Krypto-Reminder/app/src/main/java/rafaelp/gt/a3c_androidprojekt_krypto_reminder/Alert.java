@@ -1,5 +1,6 @@
 package rafaelp.gt.a3c_androidprojekt_krypto_reminder;
 
+import android.app.Service;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -8,20 +9,25 @@ import java.io.Serializable;
 public class Alert implements Serializable {
     private String coinName;
     private String currency;
+    private String lowerHigher;
     private double currentPrice;
     private double priceAlert;
     private double priceChanged;
     private double marketCap;
     private String cryptoIcon;
+    private Status status;
 
-    public Alert(String coinName,String currency, double currentPrice, double priceAlert, double priceChanged, double marketCap, String cryptoIcon) {
+
+    public Alert(String coinName,String currency,String lowerHigher, double currentPrice, double priceAlert, double priceChanged, double marketCap, String cryptoIcon, Status status) {
         this.coinName = coinName;
         this.currency = currency;
+        this.lowerHigher = lowerHigher;
         this.currentPrice = currentPrice;
         this.priceAlert = priceAlert;
         this.priceChanged = priceChanged;
         this.marketCap = marketCap;
         this.cryptoIcon = cryptoIcon;
+        this.status = status;
     }
 
     public String getCoinName() {
@@ -30,6 +36,22 @@ public class Alert implements Serializable {
 
     public void setCoinName(String coinName) {
         this.coinName = coinName;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public String getLowerHigher() {
+        return lowerHigher;
+    }
+
+    public void setLowerHigher(String lowerHigher) {
+        this.lowerHigher = lowerHigher;
     }
 
     public double getCurrentPrice() {
@@ -72,7 +94,11 @@ public class Alert implements Serializable {
         this.cryptoIcon = cryptoIcon;
     }
 
-    public String getCurrency() {
-        return currency;
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }
