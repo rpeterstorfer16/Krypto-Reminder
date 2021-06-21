@@ -34,7 +34,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="8dp"
             android:ellipsize="start"
-            android:hint="Amount">
+            android:hint="Amount of Coins">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/addAlertAmount"

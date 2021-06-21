@@ -318,9 +318,7 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
         Log.d(TAG, "startService: entered");
         Intent intent = new Intent(this, AlertService.class);
 
-        if (lf.getAlerts() != null) {
-            intent.putExtra("alerts", lf.getAlerts());
-            startService(intent);
+        startService(intent);
         }
 
     }
@@ -334,5 +332,6 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
     }*/
 
 
-}
+
+
 

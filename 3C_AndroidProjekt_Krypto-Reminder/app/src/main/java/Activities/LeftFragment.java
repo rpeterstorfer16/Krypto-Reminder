@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -45,6 +46,38 @@ public class LeftFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_left, container, false);
         initializeViews(view);
 
+        Button refreshButton = view.findViewById(R.id.refreshCurrentButton);
+
+        MainActivity ma = MainActivity.getInstance();
+
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!alerts.isEmpty()) {
+                    ArrayList<Coin> refreshPrices = ma.getCoins(100, ma.fiatname);
+                    for (int i = 0; i < alerts.size(); i++) {
+                        for (Coin newPrice : refreshPrices) {
+                            for (Alert oldPrice : alerts) {
+                                if (oldPrice.getCoinName().equals(newPrice.getCoinName().substring(0, 1).toUpperCase() + newPrice.getCoinName().substring(1).toLowerCase())) {
+                                    Log.d(TAG, String.valueOf(oldPrice.getCurrentPrice()));
+                                    oldPrice.setCurrentPrice(Math.floor(newPrice.getCurrentPrice() * 100) / 100);
+
+                                    alerts.set(i, oldPrice);
+                                    Log.d(TAG, String.valueOf(newPrice.getCurrentPrice()));
+                                    Log.d(TAG, String.valueOf(oldPrice.getCurrentPrice()));
+                                    mAdapter.notifyDataSetChanged();
+                                }
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+        });
+
         return view;
     }
 
@@ -72,7 +105,6 @@ public class LeftFragment extends Fragment {
 
         if (bundle != null) {
             if (AddAlertActivity.saved == true) {
-                //if (!alerts.contains((Alert) bundle.getSerializable("newAlert"))) {
 
                 alerts.add((Alert) bundle.getSerializable("newAlert"));
                 AddAlertActivity.saved = false;
@@ -83,6 +115,7 @@ public class LeftFragment extends Fragment {
         mAdapter = new AlertRowAdapter(this.getContext(), R.layout.alertlistviewlayout, alerts);
         list.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
+
 
     }
 
@@ -156,4 +189,6 @@ public class LeftFragment extends Fragment {
     public ArrayList<FiatFromUser> getCurrencies() {
         return currencies;
     }
+
+
 }

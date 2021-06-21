@@ -316,6 +316,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     protected void onPause() {
         super.onPause();
@@ -326,7 +327,6 @@ public class SettingsActivity extends AppCompatActivity {
     private void displayLocation(Location location) {
         double latNoDez = location == null ? -1 : location.getLatitude();
         double lonNoDez = location == null ? -1 : location.getLongitude();
-
 
         lat = Math.round(latNoDez * 1000) / 1000.0;
         lon = Math.round(lonNoDez * 1000) / 1000.0;
