@@ -85,7 +85,6 @@ public class LeftFragment extends Fragment {
         Log.d(TAG, "initialize: entered");
         list = view.findViewById(R.id.listview);
 
-
         list.setOnItemClickListener((parent, view1, position, id) -> itemSelected(position, listener));
 
     }
@@ -94,7 +93,6 @@ public class LeftFragment extends Fragment {
     public void onStart() {
         Log.d(TAG, "onStart: entered");
         super.onStart();
-
 
         instance = this;
 
@@ -105,7 +103,6 @@ public class LeftFragment extends Fragment {
 
         if (bundle != null) {
             if (AddAlertActivity.saved == true) {
-
                 alerts.add((Alert) bundle.getSerializable("newAlert"));
                 AddAlertActivity.saved = false;
 

@@ -290,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
     }
 
 
-    private void callRightActivity(int pos, String alert) {
+    private void callRightActivity(int pos, Alert alert) {
         Log.d(TAG, "callRightActivity: entered");
         Intent intent = new Intent(this, DetailedActivity.class);
         intent.putExtra("pos", pos);
@@ -300,8 +300,8 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
 
     @Override
     public void onSelectionChanged(int pos, Alert alert) {
-        if (showRight) rightFragment.show(pos, alert.toString());
-        else callRightActivity(pos, alert.toString());
+        if (showRight) rightFragment.show(pos, alert);
+        else callRightActivity(pos, alert);
     }
 
     public void loadData() {
