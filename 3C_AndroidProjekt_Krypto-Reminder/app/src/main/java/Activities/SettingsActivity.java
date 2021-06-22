@@ -418,7 +418,7 @@ public class SettingsActivity extends AppCompatActivity {
                     alert.setCurrency(ffu.getName());
                     alert.setPriceAlert(Math.floor(amount2 * 100 / 100));
                     alert.setCurrentPrice(Math.floor(c.getCurrentPrice() * 100) / 100);
-
+                    lf.writeList(this.getApplicationContext(),lf.getAlerts());
                     lf.mAdapter.notifyDataSetChanged();
                 }
 

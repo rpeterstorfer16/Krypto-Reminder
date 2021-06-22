@@ -34,14 +34,32 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/rowTransactionTransactionAndDateView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="viewEnd"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="10dp"
-        android:text="TextView"
-        android:gravity="end" />
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnDeleteTrans"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:backgroundTint="@color/myTransparent"
+            android:background="?selectableItemBackgroundBorderless"
+            app:iconTint="@color/black"
+            app:icon="@drawable/ic_delete"
+            />
+
+        <TextView
+            android:id="@+id/rowTransactionTransactionAndDateView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:gravity="end"
+            android:text="TextView"
+            android:textAlignment="viewEnd" />
+
+    </LinearLayout>
+
 </LinearLayout>

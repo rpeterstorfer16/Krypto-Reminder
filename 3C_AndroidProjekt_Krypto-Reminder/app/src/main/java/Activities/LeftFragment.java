@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
@@ -37,7 +38,7 @@ import rafaelp.gt.a3c_androidprojekt_krypto_reminder.FiatCurrencyServerTask;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.FiatFromUser;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
 
-public class LeftFragment extends Fragment {
+public class LeftFragment extends Fragment implements AlertRowAdapter.customButtonListener {
     private static final String TAG = LeftFragment.class.getSimpleName();
     protected ListView list;
     protected static ArrayList<Alert> alerts = new ArrayList<>();
@@ -55,30 +56,26 @@ public class LeftFragment extends Fragment {
 
         Button refreshButton = view.findViewById(R.id.refreshCurrentButton);
 
+
         if (readList(this.getContext()) != null) {
             alerts = readList(this.getContext());
         }
 
 
-
-        refreshButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!alerts.isEmpty()) {
-                    MainActivity ma = MainActivity.getInstance();
-                    ArrayList<Coin> refreshPrices = ma.getCoins(100, ma.fiatname);
-                    for (int i = 0; i < alerts.size(); i++) {
-                        for (Alert oldPrice : alerts) {
-                            for (Coin newPrice : refreshPrices) {
-                                if (oldPrice.getCoinName().equals(newPrice.getCoinName().substring(0, 1).toUpperCase() + newPrice.getCoinName().substring(1).toLowerCase())) {
-                                    oldPrice.setCurrentPrice(Math.floor(newPrice.getCurrentPrice() * 100) / 100);
-                                    oldPrice.setMarketCap(newPrice.getMarketCap());
-                                    oldPrice.setPriceChanged(newPrice.getPriceChangedIn24());
-                                    mAdapter.notifyDataSetChanged();
-                                    writeList(view.getContext(),alerts);
-                                }
+        refreshButton.setOnClickListener(v -> {
+            if (!alerts.isEmpty()) {
+                MainActivity ma = MainActivity.getInstance();
+                ArrayList<Coin> refreshPrices = ma.getCoins(100, ma.fiatname);
+                for (int i = 0; i < alerts.size(); i++) {
+                    for (Alert oldPrice : alerts) {
+                        for (Coin newPrice : refreshPrices) {
+                            if (oldPrice.getCoinName().equals(newPrice.getCoinName().substring(0, 1).toUpperCase() + newPrice.getCoinName().substring(1).toLowerCase())) {
+                                oldPrice.setCurrentPrice(Math.floor(newPrice.getCurrentPrice() * 100) / 100);
+                                oldPrice.setMarketCap(newPrice.getMarketCap());
+                                oldPrice.setPriceChanged(newPrice.getPriceChangedIn24());
+                                mAdapter.notifyDataSetChanged();
+                                writeList(view.getContext(), alerts);
                             }
-
                         }
 
                     }
@@ -86,10 +83,10 @@ public class LeftFragment extends Fragment {
                 }
 
             }
+
         });
 
         return view;
-
 
 
     }
@@ -101,6 +98,7 @@ public class LeftFragment extends Fragment {
         list.setOnItemClickListener((parent, view1, position, id) -> itemSelected(position, listener));
 
     }
+
 
     @Override
     public void onStart() {
@@ -118,13 +116,23 @@ public class LeftFragment extends Fragment {
             if (AddAlertActivity.saved == true) {
                 alerts.add((Alert) bundle.getSerializable("newAlert"));
                 AddAlertActivity.saved = false;
-                writeList(this.getContext(),alerts);
+                writeList(this.getContext(), alerts);
             }
         }
 
         mAdapter = new AlertRowAdapter(this.getContext(), R.layout.alertlistviewlayout, alerts);
         list.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
+        mAdapter.setCustomButtonListner(this.getInstance());
+
+    }
+
+    @Override
+    public void onButtonClickListner(int position, String value) {
+        alerts.remove(position);
+        mAdapter.notifyDataSetChanged();
+        Toast.makeText(MainActivity.getInstance(), "Alert " + (position + 1) + " was deleted" + "\n(" + value + ")", Toast.LENGTH_LONG).show();
+        writeList(this.getContext(), alerts);
 
     }
 
@@ -197,7 +205,7 @@ public class LeftFragment extends Fragment {
         return currencies;
     }
 
-    public static void writeList(Context c, ArrayList<Alert> list) {
+    public void writeList(Context c, ArrayList<Alert> list) {
         try {
             FileOutputStream fos = c.openFileOutput("Alerts", Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);

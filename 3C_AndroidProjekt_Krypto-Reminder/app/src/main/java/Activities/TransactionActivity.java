@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -31,7 +32,7 @@ import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Transaction;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.TransactionRowAdapter;
 
-public class TransactionActivity extends AppCompatActivity {
+public class TransactionActivity extends AppCompatActivity implements TransactionRowAdapter.customButtonListener {
     private static ArrayList<Transaction> transactions = new ArrayList<>();
     private ListView mListView;
     private TransactionRowAdapter mAdapter;
@@ -65,6 +66,7 @@ public class TransactionActivity extends AppCompatActivity {
         if(transactions != null)
         {
             mAdapter = new TransactionRowAdapter(this, R.layout.transactionlistviewlayout, transactions);
+            mAdapter.setCustomButtonListner(TransactionActivity.this);
             mListView = findViewById(R.id.transactionListView);
             mListView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
@@ -151,6 +153,14 @@ public class TransactionActivity extends AppCompatActivity {
             ex.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public void onButtonClickListner(int position, String value) {
+        transactions.remove(position);
+        mAdapter.notifyDataSetChanged();
+        Toast.makeText(MainActivity.getInstance(), " Transaction "+ (position+1)+" was deleted \n("+value+" Transaction)", Toast.LENGTH_LONG).show();
+        writeList(this,transactions);
     }
 }
 

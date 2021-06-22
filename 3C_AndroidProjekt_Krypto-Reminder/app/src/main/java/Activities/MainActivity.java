@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -34,6 +35,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Alert;
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.AlertRowAdapter;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.AlertService;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Coin;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.CryptocurrencyServerTask;
@@ -42,7 +44,7 @@ import rafaelp.gt.a3c_androidprojekt_krypto_reminder.FiatFromUser;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.DetailedActivity;
 
-public class MainActivity extends AppCompatActivity implements LeftFragment.OnSelectionChangedListener {
+public class MainActivity extends AppCompatActivity implements LeftFragment.OnSelectionChangedListener{
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private RightFragment rightFragment;
@@ -328,6 +330,8 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
         }
         startService(intent);
     }
+
+
 }
 
 

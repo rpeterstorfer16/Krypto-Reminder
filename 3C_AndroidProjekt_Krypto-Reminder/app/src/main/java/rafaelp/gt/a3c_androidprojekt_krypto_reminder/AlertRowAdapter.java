@@ -5,8 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -20,10 +22,19 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 
 public class AlertRowAdapter extends BaseAdapter {
+    customButtonListener customListner;
+    public interface customButtonListener {
+        void onButtonClickListner(int position, String value);
+    }
+
+    public void setCustomButtonListner(customButtonListener listener) {
+        this.customListner = listener;
+    }
 
     private ArrayList<Alert> alerts = new ArrayList<>();
     private int layoutId;
     private LayoutInflater inflater;
+
 
 
     public AlertRowAdapter(Context ctx, int layoutId, List<Alert> alerts) {
@@ -49,9 +60,18 @@ public class AlertRowAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
+        ViewHolder viewHolder;
         Alert alert = alerts.get(i);
         View listItem = (view == null) ? inflater.inflate(this.layoutId, null) : view;
-        ImageView iv = listItem.findViewById(R.id.transactionRowImageView);
+        if (view == null) {
+
+            viewHolder = new ViewHolder();
+            viewHolder.button = (Button) listItem.findViewById(R.id.buttonDelete);
+            listItem.setTag(viewHolder);
+        } else { viewHolder = (ViewHolder) view.getTag();
+        }
+
+            ImageView iv = listItem.findViewById(R.id.transactionRowImageView);
 
         Picasso.get().load(alert.getCryptoIcon()).into(iv);
         ((TextView) listItem.findViewById(R.id.transactionRowCoinNameTextView)).setText(alert.getCoinName());
@@ -59,9 +79,32 @@ public class AlertRowAdapter extends BaseAdapter {
         ((TextView) listItem.findViewById(R.id.rowTransactionCurrentPriceTextView)).setText("Current price: " + alert.getCurrentPrice() + " " + alert.getCurrency());
 
 
+
+        viewHolder.button.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (customListner != null) {
+                    customListner.onButtonClickListner(i, alert.getCoinName());
+                }
+
+            }
+        });
+
+
         return listItem;
 
 
     }
+
+    public class ViewHolder {
+        Button button;
+        String value;
+    }
+
+
+
+
+
 }
 
