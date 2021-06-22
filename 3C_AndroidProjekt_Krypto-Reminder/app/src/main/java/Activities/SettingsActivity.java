@@ -40,6 +40,7 @@ import rafaelp.gt.a3c_androidprojekt_krypto_reminder.FiatCurrencyServerTask;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.FiatFromUser;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
 
+
 public class SettingsActivity extends AppCompatActivity {
 
     ArrayList<FiatFromUser> currencies;
@@ -50,6 +51,7 @@ public class SettingsActivity extends AppCompatActivity {
     private FiatFromUser ffu;
     LeftFragment lf;
     private MainActivity ma;
+    private ArrayAdapter<String> adapter;
 
     public static String fiatname;
 
@@ -60,6 +62,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         loadData();
         fillSpinner();
+
 
         ma = MainActivity.getInstance();
         ma.registerSystemService();
@@ -80,10 +83,16 @@ public class SettingsActivity extends AppCompatActivity {
 
 
                 String fiat = fiatSpinner.getSelectedItem().toString();
-                LeftFragment lf = LeftFragment.getInstance();
+
 
                 if (fiat.equals("Currency from GPS location")) {
-                    ffu = getFiatGPS(ma.lat, ma.lon);
+                    String fiatGpsName = getFiatGPS(ma.lat, ma.lon).getName();
+
+                    for (FiatFromUser fiatFromUser : lf.getFiats()) {
+                        if (fiatFromUser.getName().equals(fiatGpsName)) {
+                            ffu = fiatFromUser;
+                        }
+                    }
                     saveData();
                     updateCurrencyGPS();
 
@@ -144,6 +153,16 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
+    public void setDefault() {
+        if (fiatname.equals("")) {
+            getFiatSpinner("EUR");
+            Spinner sItems = (Spinner) findViewById(R.id.settingsSpinner);
+            sItems.setSelection(adapter.getPosition("EUR"));
+            saveData();
+            updateCurrency();
+        }
+    }
+
     public void getFiatSpinner(String name) {
         currencies = getFiats();
 
@@ -180,7 +199,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, currenciesForView);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, currenciesForView);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         Spinner sItems = (Spinner) findViewById(R.id.settingsSpinner);
@@ -305,12 +324,12 @@ public class SettingsActivity extends AppCompatActivity {
                         }
                     }
                     double amount1 = alert.getPriceAlert() / rate1;
-                    double amount2 = (amount1 * Double.parseDouble(ffu.getRate()));
+                    double amount2 = (amount1 * Double.parseDouble(ffu.getName()));
                     alert.setCurrency(ffu.getName());
                     alert.setPriceAlert(Math.floor(amount2 * 100 / 100));
                     alert.setCurrentPrice(Math.floor(c.getCurrentPrice() * 100) / 100);
                     //lf.alerts.set(i, alert);
-                    lf.writeList(this.getApplicationContext(),lf.getAlerts());
+                    lf.writeList(this.getApplicationContext(), lf.getAlerts());
                     lf.mAdapter.notifyDataSetChanged();
                 }
 
@@ -336,7 +355,7 @@ public class SettingsActivity extends AppCompatActivity {
                     alert.setCurrency(ffu.getName());
                     alert.setPriceAlert(Math.floor(amount2 * 100 / 100));
                     alert.setCurrentPrice(Math.floor(c.getCurrentPrice() * 100) / 100);
-                    lf.writeList(this.getApplicationContext(),lf.getAlerts());
+                    lf.writeList(this.getApplicationContext(), lf.getAlerts());
                     lf.mAdapter.notifyDataSetChanged();
                 }
 

@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -22,7 +21,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -35,16 +33,15 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Alert;
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.AlertRowAdapter;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.AlertService;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Coin;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.CryptocurrencyServerTask;
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.FiatCurrencyServerTask;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.FiatFromUser;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.DetailedActivity;
 
-public class MainActivity extends AppCompatActivity implements LeftFragment.OnSelectionChangedListener{
+
+public class MainActivity extends AppCompatActivity implements LeftFragment.OnSelectionChangedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private RightFragment rightFragment;
@@ -64,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
     protected String fiatname;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
         instance = this;
 
         ImageButton settingsButton = findViewById(R.id.settingsButton);
+
 
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,6 +85,9 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
         initializeView();
 
         loadData();
+        if (fiatname.equals("")) {
+            fiatname = "EUR";
+        }
         coins = getCoins(100, fiatname);
 
 
@@ -135,7 +137,6 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
                 startActivity(new Intent(MainActivity.this, AddAlertActivity.class));
             }
         });
-
 
         startService();
 
@@ -315,8 +316,7 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
         return fiatname;
     }
 
-
-    public void stopService(View view) {
+    public void stopService() {
         Log.d(TAG, "stopService: entered");
         Intent intent = new Intent(this, AlertService.class);
         stopService(intent);

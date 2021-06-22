@@ -115,8 +115,10 @@ public class LeftFragment extends Fragment implements AlertRowAdapter.customButt
         if (bundle != null) {
             if (AddAlertActivity.saved == true) {
                 alerts.add((Alert) bundle.getSerializable("newAlert"));
+                MainActivity.getInstance().stopService();
                 AddAlertActivity.saved = false;
                 writeList(this.getContext(), alerts);
+                MainActivity.getInstance().startService();
             }
         }
 
@@ -205,7 +207,7 @@ public class LeftFragment extends Fragment implements AlertRowAdapter.customButt
         return currencies;
     }
 
-    public void writeList(Context c, ArrayList<Alert> list) {
+    public static void writeList(Context c, ArrayList<Alert> list) {
         try {
             FileOutputStream fos = c.openFileOutput("Alerts", Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);
