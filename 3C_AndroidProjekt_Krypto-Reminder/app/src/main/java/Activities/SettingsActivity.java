@@ -14,7 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Spinner;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -42,8 +44,13 @@ public class SettingsActivity extends AppCompatActivity {
     ArrayList<FiatFromUser> currencies;
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String FIATNAME = "fiatname";
+    public static final boolean ISCHECKED = Boolean.parseBoolean("isChecked");
+    public static boolean isChecked;
+
     private FiatFromUser ffu;
 
+
+    LeftFragment lf;
     private static final int RQ_ACCESS_FINE_LOCATION = 123;
     private boolean isGpsAllowed = false;
     private LocationListener locationListener;
@@ -63,6 +70,11 @@ public class SettingsActivity extends AppCompatActivity {
         fillSpinner();
 
         ma = MainActivity.getInstance();
+        ma.registerSystemService();
+        ma.checkPermissionGPS();
+
+        lf = LeftFragment.getInstance();
+
 
         Button applyButton = findViewById(R.id.applySettingsButton);
 
@@ -72,60 +84,22 @@ public class SettingsActivity extends AppCompatActivity {
 
                 Spinner fiatSpinner = findViewById(R.id.settingsSpinner);
 
+                //ISCHECKED = ((Switch) findViewById(R.id.notificationsCheckBox)).isChecked();
+
+
                 String fiat = fiatSpinner.getSelectedItem().toString();
                 LeftFragment lf = LeftFragment.getInstance();
 
                 if (fiat.equals("Currency from GPS location")) {
-                    registerSystemService();
-                    checkPermissionGPS();
-                    ffu = getFiatGPS(lat, lon);
+                    ffu = getFiatGPS(ma.lat, ma.lon);
                     saveData();
+                    updateCurrencyGPS();
 
-                    ArrayList<Coin> coins = ma.getCoins(100, ffu.getName());
-
-
-                    for (int i = 0; i < lf.alerts.size(); i++) {
-                        Alert alert = lf.alerts.get(i);
-                        for (Coin c : coins)
-                            if (alert.getCoinName().equals(c.getCoinName().substring(0, 1).toUpperCase() + c.getCoinName().substring(1).toLowerCase())) {
-                                alert.setCurrency(ffu.getName());
-                                alert.setCurrentPrice(c.getCurrentPrice());
-                                lf.alerts.set(i, alert);
-                                lf.mAdapter.notifyDataSetChanged();
-                            }
-
-                    }
                 } else {
                     getFiatSpinner(fiat);
                     saveData();
+                    updateCurrency();
 
-                    ArrayList<Coin> coins = ma.getCoins(100, ffu.getName());
-
-                    for (int i = 0; i < lf.alerts.size(); i++) {
-                        Alert alert = lf.alerts.get(i);
-                        for (Coin c : coins)
-                            if (alert.getCoinName().equals(c.getCoinName().substring(0, 1).toUpperCase() + c.getCoinName().substring(1).toLowerCase())) {
-                                double rate1 = 0.0;
-                                for(FiatFromUser currency : lf.getFiats())
-                                {
-
-                                    if(alert.getCurrency().equals(currency.getName()))
-                                    {
-
-                                        rate1 = Double.parseDouble(currency.getRate());
-                                    }
-                                }
-                                double amount1 = alert.getPriceAlert()/rate1;
-                                double amount2 = (amount1*Double.parseDouble(ffu.getRate()));
-                                alert.setCurrency(ffu.getName());
-                                alert.setPriceAlert(Math.floor(amount2*100/ 100));
-                                alert.setCurrentPrice(Math.floor(c.getCurrentPrice() * 100) / 100);
-                                lf.alerts.set(i, alert);
-
-                                lf.mAdapter.notifyDataSetChanged();
-                            }
-
-                    }
 
                 }
 
@@ -383,6 +357,7 @@ public class SettingsActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
+        //editor.putBoolean(ISCHECKED, isChecked);
         editor.putString(FIATNAME, ffu.getName());
 
         editor.apply();
@@ -391,7 +366,62 @@ public class SettingsActivity extends AppCompatActivity {
     public void loadData() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         fiatname = sharedPreferences.getString(FIATNAME, "");
+        //isChecked = sharedPreferences.getBoolean(ISCHECKED,true);
 
     }
 
+    public void updateCurrencyGPS() {
+
+        ArrayList<Coin> coins = ma.getCoins(100, ffu.getName());
+
+        for (int i = 0; i < lf.alerts.size(); i++) {
+            Alert alert = lf.alerts.get(i);
+            for (Coin c : coins)
+                if (alert.getCoinName().equals(c.getCoinName().substring(0, 1).toUpperCase() + c.getCoinName().substring(1).toLowerCase())) {
+                    double rate1 = 0.0;
+                    for (FiatFromUser currency : lf.getFiats()) {
+
+                        if (alert.getCurrency().equals(currency.getName())) {
+
+                            rate1 = Double.parseDouble(currency.getRate());
+                        }
+                    }
+                    double amount1 = alert.getPriceAlert() / rate1;
+                    double amount2 = (amount1 * Double.parseDouble(ffu.getRate()));
+                    alert.setCurrency(ffu.getName());
+                    alert.setPriceAlert(Math.floor(amount2 * 100 / 100));
+                    alert.setCurrentPrice(Math.floor(c.getCurrentPrice() * 100) / 100);
+                    lf.alerts.set(i, alert);
+
+                    lf.mAdapter.notifyDataSetChanged();
+                }
+
+        }
+
+    }
+
+    public void updateCurrency() {
+        ArrayList<Coin> coins = ma.getCoins(100, ffu.getName());
+
+        for (int i = 0; i < lf.alerts.size(); i++) {
+            Alert alert = lf.alerts.get(i);
+            for (Coin c : coins)
+                if (alert.getCoinName().equals(c.getCoinName().substring(0, 1).toUpperCase() + c.getCoinName().substring(1).toLowerCase())) {
+                    double rate1 = 0.0;
+                    for (FiatFromUser currency : lf.getFiats()) {
+                        if (alert.getCurrency().equals(currency.getName())) {
+                            rate1 = Double.parseDouble(currency.getRate());
+                        }
+                    }
+                    double amount1 = alert.getPriceAlert() / rate1;
+                    double amount2 = (amount1 * Double.parseDouble(ffu.getRate()));
+                    alert.setCurrency(ffu.getName());
+                    alert.setPriceAlert(Math.floor(amount2 * 100 / 100));
+                    alert.setCurrentPrice(Math.floor(c.getCurrentPrice() * 100) / 100);
+
+                    lf.mAdapter.notifyDataSetChanged();
+                }
+
+        }
+    }
 }

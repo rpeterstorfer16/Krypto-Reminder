@@ -34,7 +34,7 @@
 
 
             <Switch
-                android:id="@+id/switch2"
+                android:id="@+id/notificationsCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

@@ -33,17 +33,10 @@ public class AlertService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand: Service: onStartCommand");
-
-
-        if (worker != null) {
-            if (!worker.isAlive()) {
-                worker = new Thread(this::doWork);
-                Log.d(TAG, "es geht");
-                worker.start();
-            }
-        }
-
-
+        if(worker.getState().equals(Thread.State.NEW)){
+        if (!worker.isAlive()) {
+            worker.start();
+        }}
         return super.onStartCommand(intent, flags, startId);
 
     }
@@ -51,6 +44,7 @@ public class AlertService extends Service {
     @Override
     public void onCreate() {
         Log.d(TAG, "Service started");
+        worker = new Thread(this::doWork);
         super.onCreate();
     }
 
@@ -62,32 +56,41 @@ public class AlertService extends Service {
         super.onDestroy();
     }
 
+
     private void doWork() {
         try {
+            Log.d(TAG, "do work entered");
+            Thread.sleep(2 * 3000);
+
             LeftFragment lf = LeftFragment.getInstance();
-            MainActivity ma = new MainActivity();
 
 
-            ArrayList<Coin> coins = ma.getCoins(100, ma.getFiatname());
 
-            for (Alert alert : lf.getAlerts())
-                for (Coin c : coins) {
-                    if (c.getCoinName().equals(alert.getCoinName())) {
-                        alert.setCurrentPrice(c.getCurrentPrice());
+            ArrayList<Coin> coins = MainActivity.getInstance().getCoins(100, MainActivity.getInstance().getFiatname());
+
+            for (Coin coin : coins)
+            {
+                for (Alert alert : lf.getAlerts())
+                {
+                    if(alert.getCoinName().equals(coin.getCoinName()))
+                    {
+                        alert.setCurrentPrice(coin.getCurrentPrice());
                     }
                 }
-
+            }
 
             for (Alert alert : lf.getAlerts()) {
                 if (alert != null) {
                     if (alert.getStatus().equals(Status.ACTIVE)) {
                         if (alert.getLowerHigher().equals("lower")) {
+                            Log.d(TAG, "hi");
                             if (alert.getCurrentPrice() > alert.getPriceAlert()) {
-                                Log.d(TAG, "hi");
+
                             }
                         } else if (alert.getLowerHigher().equals("higher")) {
+                            Log.d(TAG, "hilll");
                             if (alert.getCurrentPrice() < alert.getPriceAlert()) {
-                                Log.d(TAG, "hilll");
+
                             }
                         }
 
@@ -97,18 +100,11 @@ public class AlertService extends Service {
 
             }
 
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
-            Thread.sleep(1 * 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "Thread end: thread-name: "
-                + Thread.currentThread().getName());
+        Log.d(TAG, "Thread end: thread-name: " + Thread.currentThread().getName());
     }
 
     /*public void buildNotification() {

@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.squareup.picasso.Picasso;
+
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Alert;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
 
@@ -18,9 +20,9 @@ public class RightFragment extends Fragment {
     public final static String TAG = RightFragment.class.getSimpleName();
     ImageView iconView;
     private TextView currentPriceTextView;
-    private TextView PriceAlertTextView;
-    private TextView PriceChangedTextView;
-    private TextView MarkedCapTextView;
+    private TextView priceAlertTextView;
+    private TextView priceChangedTextView;
+    private TextView markedCapTextView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,9 +37,9 @@ public class RightFragment extends Fragment {
         Log.d(TAG, "intializeViews: entered");
         iconView = view.findViewById(R.id.CryptoCurrencyimageView);
         currentPriceTextView = view.findViewById(R.id.currentPriceTextView);
-        PriceAlertTextView = view.findViewById(R.id.PriceAlertTextView);
-        PriceChangedTextView = view.findViewById(R.id.PriceChangedTextView);
-        MarkedCapTextView = view.findViewById(R.id.MarkedCapTextView);
+        priceAlertTextView = view.findViewById(R.id.PriceAlertTextView);
+        priceChangedTextView = view.findViewById(R.id.PriceChangedTextView);
+        markedCapTextView = view.findViewById(R.id.MarkedCapTextView);
 
 
 
@@ -45,6 +47,11 @@ public class RightFragment extends Fragment {
 
     public void show(int pos, Alert alert) {
         Log.d(TAG, "show: entered");
+        Picasso.get().load(alert.getCryptoIcon()).into(iconView);
+        currentPriceTextView.setText("Current price: "+alert.getCurrentPrice());
+        priceAlertTextView.setText("Price alert at: " + alert.getPriceAlert());
+        priceChangedTextView.setText("Price changed(24h): " + alert.getPriceChanged());
+        markedCapTextView.setText("Market capitalisation: " + alert.getMarketCap());
     }
 
     @Override

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -50,8 +51,8 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
     private boolean isGpsAllowed = false;
     private LocationListener locationListener;
     private LocationManager locationManager;
-    private double lat;
-    private double lon;
+    protected double lat;
+    protected double lon;
     private FiatFromUser ffu;
     protected ArrayList<Coin> coins;
     private static MainActivity instance;
@@ -130,10 +131,10 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
                 fab.startAnimation(rotateForward);
                 // switching to AddAlertActivity
                 startActivity(new Intent(MainActivity.this, AddAlertActivity.class));
-
-
             }
         });
+
+
         startService();
 
 
@@ -183,13 +184,13 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
 
     }
 
-    private void registerSystemService() {
+    public void registerSystemService() {
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         // from Api 23 and above you can call getSystemService this way:
         // locationManager = (LocationManager) getSystemService(LocationManager.class);
     }
 
-    private void checkPermissionGPS() {
+    public void checkPermissionGPS() {
         String permission = Manifest.permission.ACCESS_FINE_LOCATION;
         if (ActivityCompat.checkSelfPermission(this, permission)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -212,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
         }
     }
 
-    private void gpsGranted() {
+    public void gpsGranted() {
         isGpsAllowed = true;
         locationListener = new LocationListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -265,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
         lon = Math.round(lonNoDez * 1000) / 1000.0;
 
 
-       /* if (ffu == null) {
+       /*if (ffu == null) {
             ffu = getFiat(lat, lon);
             testView.setText(ffu.toString());
 
@@ -284,8 +285,7 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
 
     private void initializeView() {
         Log.d(TAG, "initializeView: entered");
-        rightFragment = (RightFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.fragRight);
+        rightFragment = (RightFragment) getSupportFragmentManager().findFragmentById(R.id.fragRight);
         showRight = rightFragment != null && rightFragment.isInLayout();
     }
 
@@ -313,23 +313,22 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
         return fiatname;
     }
 
-    public void startService() {
-        LeftFragment lf = LeftFragment.getInstance();
-        Log.d(TAG, "startService: entered");
-        Intent intent = new Intent(this, AlertService.class);
 
-        startService(intent);
-        }
-
-    }
-
-
-
-    /*public void stopService(View view) {
+    public void stopService(View view) {
         Log.d(TAG, "stopService: entered");
         Intent intent = new Intent(this, AlertService.class);
         stopService(intent);
-    }*/
+    }
+
+    public void startService() {
+        Log.d(TAG, "startService: entered");
+        Intent intent = new Intent(this, AlertService.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            this.startForegroundService(intent);
+        }
+        startService(intent);
+    }
+}
 
 
 

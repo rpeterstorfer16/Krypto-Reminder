@@ -8,16 +8,7 @@
     <include layout="@layout/toolbar" />
 
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="4dp"
-        android:layout_gravity="center"
-        android:layout_weight="0.5"
-        android:fontFamily="@font/roboto_medium_italic"
-        android:padding="10dp"
-        android:text="Alerts"
-        android:textSize="20dp" />
+
 
     <FrameLayout
         android:id="@+id/content"

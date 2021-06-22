@@ -10,12 +10,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import Activities.LeftFragment;
+import Activities.MainActivity;
 import Activities.RightFragment;
 
 public class DetailedActivity extends AppCompatActivity {
@@ -39,6 +41,14 @@ public class DetailedActivity extends AppCompatActivity {
             return;
         }
         handleIntent();
+
+        Button backButton = findViewById(R.id.DetailedViewBackButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(), MainActivity.class));
+            }
+        });
     }
 
     private void handleIntent() {
@@ -46,8 +56,6 @@ public class DetailedActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent == null) return;
-        RightFragment rightFragment = (RightFragment) getSupportFragmentManager().findFragmentById(R.id.fragRight);
-        int pos = intent.getIntExtra("pos", -1);
         Alert alert = (Alert) intent.getSerializableExtra("alert");
         //rightFragment.show(pos, alert);
         Picasso.get().load(alert.getCryptoIcon()).into(iconView);
@@ -60,11 +68,11 @@ public class DetailedActivity extends AppCompatActivity {
 
     private void intializeViews() {
         Log.d(TAG, "intializeViews: entered");
-        iconView = findViewById(R.id.CryptoCurrencyimageView);
-        currentPriceTextView = findViewById(R.id.currentPriceTextView);
-        priceAlertTextView = findViewById(R.id.PriceAlertTextView);
-        priceChangedTextView = findViewById(R.id.PriceChangedTextView);
-        markedCapTextView = findViewById(R.id.MarkedCapTextView);
+        iconView = findViewById(R.id.DeatailedCryptoCurrencyimageView);
+        currentPriceTextView = findViewById(R.id.DetailedcurrentPriceTextView);
+        priceAlertTextView = findViewById(R.id.DetailedPriceAlertTextView);
+        priceChangedTextView = findViewById(R.id.DetailedPriceChangedTextView);
+        markedCapTextView = findViewById(R.id.DetailedMarkedCapTextView);
 
     }
 

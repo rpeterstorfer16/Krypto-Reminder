@@ -1,7 +1,9 @@
 package Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -16,16 +18,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Alert;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.AlertRowAdapter;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Transaction;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.TransactionRowAdapter;
 
 public class TransactionActivity extends AppCompatActivity {
-    private static List<Transaction> transactions = new ArrayList<>();
+    private static ArrayList<Transaction> transactions = new ArrayList<>();
     private ListView mListView;
     private TransactionRowAdapter mAdapter;
 
@@ -50,13 +57,22 @@ public class TransactionActivity extends AppCompatActivity {
         });
 
 
+        if(readList(this) != null)
+        {
+            transactions = readList(this);
+        }
+
         if(transactions != null)
         {
             mAdapter = new TransactionRowAdapter(this, R.layout.transactionlistviewlayout, transactions);
             mListView = findViewById(R.id.transactionListView);
             mListView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
+
+
         }
+
+
 
 
         bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -109,6 +125,31 @@ public class TransactionActivity extends AppCompatActivity {
         if (bundle != null) {
             Transaction transaction = (Transaction) bundle.getSerializable("transaction");
             transactions.add(transaction);
+            writeList(this, transactions);
+        }
+    }
+
+    public static void writeList(Context c, ArrayList<Transaction> list) {
+        try {
+            FileOutputStream fos = c.openFileOutput("Transactions", Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(list);
+            os.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static ArrayList<Transaction> readList(Context c) {
+        try {
+            FileInputStream fis = c.openFileInput("Transactions");
+            ObjectInputStream is = new ObjectInputStream(fis);
+            ArrayList<Transaction> list = (ArrayList<Transaction>) is.readObject();
+            is.close();
+            return list;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
         }
     }
 }
