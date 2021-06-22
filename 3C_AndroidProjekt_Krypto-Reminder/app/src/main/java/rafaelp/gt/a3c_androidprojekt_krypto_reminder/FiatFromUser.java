@@ -1,14 +1,16 @@
 package rafaelp.gt.a3c_androidprojekt_krypto_reminder;
 
 public class FiatFromUser {
-    private String name;
-    private String rate;
     private String symbol;
+    private String rate;
+    private String name;
 
-    public FiatFromUser(String name, String rate, String symbol) {
-        this.name = name;
-        this.rate = rate;
+
+    public FiatFromUser(String symbol, String rate, String name) {
         this.symbol = symbol;
+        this.rate = rate;
+        this.name = name;
+
     }
 
     public String getSymbol() {

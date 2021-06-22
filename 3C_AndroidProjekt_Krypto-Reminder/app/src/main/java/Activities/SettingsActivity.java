@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -46,17 +47,8 @@ public class SettingsActivity extends AppCompatActivity {
     public static final String FIATNAME = "fiatname";
     public static final boolean ISCHECKED = Boolean.parseBoolean("isChecked");
     public static boolean isChecked;
-
     private FiatFromUser ffu;
-
-
     LeftFragment lf;
-    private static final int RQ_ACCESS_FINE_LOCATION = 123;
-    private boolean isGpsAllowed = false;
-    private LocationListener locationListener;
-    private LocationManager locationManager;
-    private double lat;
-    private double lon;
     private MainActivity ma;
 
     public static String fiatname;
@@ -95,10 +87,20 @@ public class SettingsActivity extends AppCompatActivity {
                     saveData();
                     updateCurrencyGPS();
 
+                    int duration = Toast.LENGTH_SHORT;
+
+                    Toast toast = Toast.makeText(SettingsActivity.this, "Successful", duration);
+                    toast.show();
+
                 } else {
                     getFiatSpinner(fiat);
                     saveData();
                     updateCurrency();
+
+                    int duration = Toast.LENGTH_SHORT;
+
+                    Toast toast = Toast.makeText(SettingsActivity.this, "Successful", duration);
+                    toast.show();
 
 
                 }
@@ -205,7 +207,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                 String[] currencyArray = currency.split(";");
 
-                currencies.add(new FiatFromUser(currencyArray[0], currencyArray[1], (currencyArray[2])));
+                currencies.add(new FiatFromUser(currencyArray[2], currencyArray[1], (currencyArray[0])));
 
                 currency = "";
             }
@@ -224,92 +226,8 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
 
-    private void registerSystemService() {
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        // from Api 23 and above you can call getSystemService this way:
-        // locationManager = (LocationManager) getSystemService(LocationManager.class);
-    }
-
-    private void checkPermissionGPS() {
-        String permission = Manifest.permission.ACCESS_FINE_LOCATION;
-        if (ActivityCompat.checkSelfPermission(this, permission)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{permission},
-                    RQ_ACCESS_FINE_LOCATION);
-        } else {
-            gpsGranted();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode != RQ_ACCESS_FINE_LOCATION) return;
-        if (grantResults.length > 0 &&
-                grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-        } else {
-            gpsGranted();
-        }
-    }
-
-    private void gpsGranted() {
-        isGpsAllowed = true;
-        locationListener = new LocationListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onLocationChanged(Location location) {
-                displayLocation(location);
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-            }
-        };
-    }
-
-    @SuppressLint("MissingPermission")
-    @Override
-    protected void onResume() {
-        super.onResume();
-        super.onPostResume();
-        if (isGpsAllowed) {
-            locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER,
-                    400000,
-                    2000,
-                    locationListener);
-        }
-    }
-
-    @SuppressLint("MissingPermission")
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (isGpsAllowed) locationManager.removeUpdates(locationListener);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    private void displayLocation(Location location) {
-        double latNoDez = location == null ? -1 : location.getLatitude();
-        double lonNoDez = location == null ? -1 : location.getLongitude();
-
-        lat = Math.round(latNoDez * 1000) / 1000.0;
-        lon = Math.round(lonNoDez * 1000) / 1000.0;
-
-
-    }
-
     public FiatFromUser getFiatGPS(double latitute, double longitute) {
-        String coin = "";
+        String fiat = "";
         String accessKey = "5fdb5f6c40e83447a40ea1615831570c";
         FiatFromUser fiatFromUser = null;
 
@@ -329,16 +247,16 @@ public class SettingsActivity extends AppCompatActivity {
             JSONArray jsArray = js3.getJSONArray("currencies");
 
             JSONObject jsonObject = jsArray.getJSONObject(0);
-            coin += jsonObject.getString("symbol");
-            coin += ";";
-            coin += jsonObject.getString("code");
-            coin += ";";
-            coin += jsonObject.getString("name");
+            fiat += jsonObject.getString("symbol");
+            fiat += ";";
+            fiat += jsonObject.getString("code");
+            fiat += ";";
+            fiat += jsonObject.getString("name");
 
 
-            String[] coinArray = coin.split(";");
+            String[] fiatArray = fiat.split(";");
 
-            fiatFromUser = new FiatFromUser(coinArray[0], coinArray[1], coinArray[2]);
+            fiatFromUser = new FiatFromUser(fiatArray[0], fiatArray[1], fiatArray[2]);
 
 
         } catch (ExecutionException e) {
@@ -381,7 +299,7 @@ public class SettingsActivity extends AppCompatActivity {
                     double rate1 = 0.0;
                     for (FiatFromUser currency : lf.getFiats()) {
 
-                        if (alert.getCurrency().equals(currency.getName())) {
+                        if (alert.getCurrency().equals(currency.getSymbol())) {
 
                             rate1 = Double.parseDouble(currency.getRate());
                         }
@@ -391,8 +309,8 @@ public class SettingsActivity extends AppCompatActivity {
                     alert.setCurrency(ffu.getName());
                     alert.setPriceAlert(Math.floor(amount2 * 100 / 100));
                     alert.setCurrentPrice(Math.floor(c.getCurrentPrice() * 100) / 100);
-                    lf.alerts.set(i, alert);
-
+                    //lf.alerts.set(i, alert);
+                    lf.writeList(this.getApplicationContext(),lf.getAlerts());
                     lf.mAdapter.notifyDataSetChanged();
                 }
 
@@ -409,7 +327,7 @@ public class SettingsActivity extends AppCompatActivity {
                 if (alert.getCoinName().equals(c.getCoinName().substring(0, 1).toUpperCase() + c.getCoinName().substring(1).toLowerCase())) {
                     double rate1 = 0.0;
                     for (FiatFromUser currency : lf.getFiats()) {
-                        if (alert.getCurrency().equals(currency.getName())) {
+                        if (alert.getCurrency().equals(currency.getSymbol())) {
                             rate1 = Double.parseDouble(currency.getRate());
                         }
                     }

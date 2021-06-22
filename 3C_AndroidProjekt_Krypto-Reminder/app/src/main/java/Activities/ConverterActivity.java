@@ -179,16 +179,18 @@ public class ConverterActivity extends AppCompatActivity {
             currency = String.valueOf(textView1.getText());
         } else return 0.0;
 
-        ArrayList<Coin> coinsWithUserFiat;
 
-        coinsWithUserFiat = ma.coins;
+        ArrayList<Coin> coinsWithUserSelectedFiat = ma.getCoins(100,currency);
 
         Coin coin = null;
-        for (Coin c : coinsWithUserFiat) {
+        for (Coin c : coinsWithUserSelectedFiat) {
             if (c.getCoinName().equals(cryptocurrency)) {
                 coin = c;
             }
         }
+
+
+
 
         TextView amountView = findViewById(R.id.addAlertAmount);
         double amount = 0;
