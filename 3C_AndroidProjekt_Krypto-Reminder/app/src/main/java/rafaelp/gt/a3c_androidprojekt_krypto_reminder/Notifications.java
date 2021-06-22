@@ -1,4 +1,4 @@
-package Activities;
+package rafaelp.gt.a3c_androidprojekt_krypto_reminder;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,7 +13,7 @@ import java.util.Collections;
 
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
 
-public class NotificationsActivity extends Application {
+public class Notifications extends Application {
 public static final String CHANNEL_1_ID = "channel1";
     @Override
     public void onCreate() {

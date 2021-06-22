@@ -116,9 +116,12 @@ public class LeftFragment extends Fragment implements AlertRowAdapter.customButt
             if (AddAlertActivity.saved == true) {
                 alerts.add((Alert) bundle.getSerializable("newAlert"));
                 MainActivity.getInstance().stopService();
+                Log.d(TAG,"stopserviceeeeeeeeeeee");
                 AddAlertActivity.saved = false;
                 writeList(this.getContext(), alerts);
                 MainActivity.getInstance().startService();
+                Log.d(TAG,"start again");
+
             }
         }
 

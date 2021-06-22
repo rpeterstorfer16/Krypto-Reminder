@@ -1,31 +1,19 @@
 package rafaelp.gt.a3c_androidprojekt_krypto_reminder;
 
-import android.app.IntentService;
 import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 import Activities.LeftFragment;
 import Activities.MainActivity;
-import Activities.NotificationsActivity;
 
 public class AlertService extends Service {
 
@@ -77,7 +65,7 @@ public class AlertService extends Service {
     private void doWork() {
         try {
             Log.d(TAG, "do work entered");
-            Thread.sleep(2 * 3000);
+            Thread.sleep(5 * 3000);
 
             LeftFragment lf = LeftFragment.getInstance();
 
@@ -139,7 +127,7 @@ public class AlertService extends Service {
     }*/
 
     public void sendOnChannel1(String coinName, double alertAt) {
-        Notification notification = new NotificationCompat.Builder(this, NotificationsActivity.CHANNEL_1_ID)
+        Notification notification = new NotificationCompat.Builder(this, Notifications.CHANNEL_1_ID)
                 .setSmallIcon(R.drawable.ic_alert)
                 .setContentTitle("Target has been hit")
                 .setContentText(coinName + " has hit your target at: " + alertAt)
