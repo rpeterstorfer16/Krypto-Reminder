@@ -67,7 +67,7 @@ public class AlertService extends Service {
             try {
                 Log.d(TAG, "do work entered");
 
-                Thread.sleep(2 * 3000);
+                Thread.sleep(4 * 3000);
 
                 ArrayList<Coin> coins = MainActivity.getInstance().getCoins(100, MainActivity.getInstance().getFiatname());
 
@@ -87,12 +87,12 @@ public class AlertService extends Service {
 
                             if (alert.getStatus().equals(Status.ACTIVE)) {
                                 if (alert.getLowerHigher().equals("lower")) {
-                                    if (alert.getCurrentPrice() < alert.getPriceAlert()) {
+                                    if (alert.getCurrentPrice() <= alert.getPriceAlert()) {
                                         alert.setStatus(Status.REACHED);
                                         sendOnChannel1(alert.getCoinName(), alert.getPriceAlert());
                                     }
                                 } else if (alert.getLowerHigher().equals("higher")) {
-                                    if (alert.getCurrentPrice() > alert.getPriceAlert()) {
+                                    if (alert.getCurrentPrice() >= alert.getPriceAlert()) {
                                         alert.setStatus(Status.REACHED);
                                         sendOnChannel1(alert.getCoinName(), alert.getPriceAlert());
 

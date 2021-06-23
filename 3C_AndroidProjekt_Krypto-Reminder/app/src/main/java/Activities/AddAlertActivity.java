@@ -31,10 +31,6 @@ public class AddAlertActivity extends AppCompatActivity {
 
     MainActivity ma = MainActivity.getInstance();
     ArrayList<Coin> coins;
-    public static final String SHARED_PREFS = "sharedPrefs";
-    public static final String FIATNAME = "fiat";
-
-    public static String fiatname;
     public static boolean saved;
 
     @Override
