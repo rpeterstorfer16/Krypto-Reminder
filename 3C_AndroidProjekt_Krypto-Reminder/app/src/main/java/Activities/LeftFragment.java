@@ -43,7 +43,7 @@ public class LeftFragment extends Fragment implements AlertRowAdapter.customButt
     protected ListView list;
     protected static ArrayList<Alert> alerts = new ArrayList<>();
     private OnSelectionChangedListener listener;
-    protected AlertRowAdapter mAdapter;
+    protected static AlertRowAdapter mAdapter;
     private ArrayList<FiatFromUser> currencies;
     private static LeftFragment instance;
 
@@ -60,6 +60,9 @@ public class LeftFragment extends Fragment implements AlertRowAdapter.customButt
         if (readList(this.getContext()) != null) {
             alerts = readList(this.getContext());
         }
+        //mAdapter.notifyDataSetChanged();
+
+
 
 
         refreshButton.setOnClickListener(v -> {
@@ -116,11 +119,10 @@ public class LeftFragment extends Fragment implements AlertRowAdapter.customButt
             if (AddAlertActivity.saved == true) {
                 alerts.add((Alert) bundle.getSerializable("newAlert"));
                 MainActivity.getInstance().stopService();
-                Log.d(TAG,"stopserviceeeeeeeeeeee");
                 AddAlertActivity.saved = false;
                 writeList(this.getContext(), alerts);
                 MainActivity.getInstance().startService();
-                Log.d(TAG,"start again");
+                Log.d(TAG, "start again");
 
             }
         }
@@ -235,6 +237,11 @@ public class LeftFragment extends Fragment implements AlertRowAdapter.customButt
             return null;
         }
     }
+    public AlertRowAdapter getmAdapter(){
+        return mAdapter;
+    }
+
+
 
 
 }

@@ -15,7 +15,7 @@
 
 
         <ImageView
-            android:id="@+id/transactionRowImageView"
+            android:id="@+id/alertRowImageView"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginLeft="10dp"
@@ -29,7 +29,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/rowTransactionTargetTextView"
+                android:id="@+id/rowAlertTargetTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -39,7 +39,7 @@
                 android:text="TextView" />
 
             <TextView
-                android:id="@+id/rowTransactionCurrentPriceTextView"
+                android:id="@+id/rowAlertCurrentPriceTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -68,11 +68,25 @@
     </LinearLayout>
 
 
-    <TextView
-        android:id="@+id/transactionRowCoinNameTextView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:text="TextView" />
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/alertRowCoinNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/statusTextView"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical|right"
+            android:text="TextView" />
+    </LinearLayout>
 
 </LinearLayout>

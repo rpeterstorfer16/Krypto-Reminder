@@ -85,21 +85,32 @@ public class SettingsActivity extends AppCompatActivity {
                 String fiat = fiatSpinner.getSelectedItem().toString();
 
 
+
+
                 if (fiat.equals("Currency from GPS location")) {
-                    String fiatGpsName = getFiatGPS(ma.lat, ma.lon).getName();
+                    if(ma.lat != 0.0 && ma.lon != 0.0)
+                    {
+                        FiatFromUser fiatGps = getFiatGPS(ma.lat, ma.lon);
 
-                    for (FiatFromUser fiatFromUser : lf.getFiats()) {
-                        if (fiatFromUser.getName().equals(fiatGpsName)) {
-                            ffu = fiatFromUser;
+                        for (FiatFromUser fiatFromUser : lf.getFiats()) {
+                            if (fiatFromUser.getSymbol().equals(fiatGps.getRate())) {
+                                ffu = fiatFromUser;
+                            }
                         }
+                        saveData();
+                        updateCurrencyGPS();
+
+                        int duration = Toast.LENGTH_SHORT;
+
+                        Toast toast = Toast.makeText(SettingsActivity.this, "Successful", duration);
+                        toast.show();
+
+                    }else{
+                        int duration = Toast.LENGTH_LONG;
+
+                        Toast toast = Toast.makeText(SettingsActivity.this, "GPS is still loading...try again in a minute", duration);
+                        toast.show();
                     }
-                    saveData();
-                    updateCurrencyGPS();
-
-                    int duration = Toast.LENGTH_SHORT;
-
-                    Toast toast = Toast.makeText(SettingsActivity.this, "Successful", duration);
-                    toast.show();
 
                 } else {
                     getFiatSpinner(fiat);
@@ -324,8 +335,8 @@ public class SettingsActivity extends AppCompatActivity {
                         }
                     }
                     double amount1 = alert.getPriceAlert() / rate1;
-                    double amount2 = (amount1 * Double.parseDouble(ffu.getName()));
-                    alert.setCurrency(ffu.getName());
+                    double amount2 = (amount1 * Double.parseDouble(ffu.getRate()));
+                    alert.setCurrency(ffu.getSymbol());
                     alert.setPriceAlert(Math.floor(amount2 * 100 / 100));
                     alert.setCurrentPrice(Math.floor(c.getCurrentPrice() * 100) / 100);
                     //lf.alerts.set(i, alert);

@@ -17,11 +17,10 @@ import Activities.MainActivity;
 
 public class AlertService extends Service {
 
-    private static final String CHANNEL_ID = "Chalnel1";
     private static String TAG = AlertService.class.getSimpleName();
     private Thread worker;
-
     private NotificationManagerCompat notificationManager;
+    private LeftFragment lf = LeftFragment.getInstance();
 
 
     @Nullable
@@ -63,33 +62,42 @@ public class AlertService extends Service {
 
 
     private void doWork() {
-        try {
-            Log.d(TAG, "do work entered");
-            Thread.sleep(5 * 3000);
 
-            LeftFragment lf = LeftFragment.getInstance();
+        while (true) {
+            try {
+                Log.d(TAG, "do work entered");
 
+                Thread.sleep(2 * 3000);
 
-            ArrayList<Coin> coins = MainActivity.getInstance().getCoins(100, MainActivity.getInstance().getFiatname());
+                ArrayList<Coin> coins = MainActivity.getInstance().getCoins(100, MainActivity.getInstance().getFiatname());
 
-            for (Coin coin : coins) {
-                for (Alert alert : lf.getAlerts()) {
-                    if (alert.getCoinName().equals(coin.getCoinName())) {
-                        alert.setCurrentPrice(coin.getCurrentPrice());
+                for (Coin coin : coins) {
+                    for (Alert alert : lf.getAlerts()) {
+                        if (alert.getCoinName().equals(coin.getCoinName().substring(0, 1).toUpperCase() + coin.getCoinName().substring(1).toLowerCase())) {
+                            alert.setCurrentPrice(coin.getCurrentPrice());
+                            alert.setCurrentPrice(Math.floor(coin.getCurrentPrice() * 100) / 100);
+                            Log.d(TAG, alert.getCurrentPrice()+" priceCur");
+                        }
                     }
                 }
-            }
 
-            for (Alert alert : lf.getAlerts()) {
-                if (alert != null) {
-                    if (alert.getStatus().equals(Status.ACTIVE)) {
-                        if (alert.getLowerHigher().equals("lower")) {
-                            if (alert.getCurrentPrice() > alert.getPriceAlert()) {
-                                sendOnChannel1(alert.getCoinName(), alert.getPriceAlert());
-                            }
-                        } else if (alert.getLowerHigher().equals("higher")) {
-                            if (alert.getCurrentPrice() < alert.getPriceAlert()) {
-                                sendOnChannel1(alert.getCoinName(), alert.getPriceAlert());
+                for (Alert alert : lf.getAlerts()) {
+                    if (alert != null) {
+                        if (!alert.getStatus().equals(String.valueOf(Status.REACHED))) {
+
+                            if (alert.getStatus().equals(Status.ACTIVE)) {
+                                if (alert.getLowerHigher().equals("lower")) {
+                                    if (alert.getCurrentPrice() < alert.getPriceAlert()) {
+                                        alert.setStatus(Status.REACHED);
+                                        sendOnChannel1(alert.getCoinName(), alert.getPriceAlert());
+                                    }
+                                } else if (alert.getLowerHigher().equals("higher")) {
+                                    if (alert.getCurrentPrice() > alert.getPriceAlert()) {
+                                        alert.setStatus(Status.REACHED);
+                                        sendOnChannel1(alert.getCoinName(), alert.getPriceAlert());
+
+                                    }
+                                }
 
                             }
                         }
@@ -98,33 +106,17 @@ public class AlertService extends Service {
 
                 }
 
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+            Log.d(TAG, "Thread end: thread-name: " + Thread.currentThread().getName());
 
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
-        Log.d(TAG, "Thread end: thread-name: " + Thread.currentThread().getName());
     }
 
-    /*public void buildNotification() {
-         NotificationCompat.Builder builder = new NotificationCompat.Builder(AlertService.this)
-                 .setSmallIcon(R.drawable.ic_alert)
-                 .setContentTitle("Krypto-Reminder")
-                 .setContentText("An alert hit the target")
-                 .setAutoCancel(true);
 
-         Intent intent = new Intent(AlertService.this, NotificationsActivity.class);
-         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-         intent.putExtra("message", "Es geht oida");
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(AlertService.this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pendingIntent);
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0,builder.build());
-
-    }*/
 
     public void sendOnChannel1(String coinName, double alertAt) {
         Notification notification = new NotificationCompat.Builder(this, Notifications.CHANNEL_1_ID)

@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
     protected String fiatname;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
             fiatname = "EUR";
         }
         coins = getCoins(100, fiatname);
+
 
 
         // Declaration and setting of BottomNavigationBar
@@ -267,15 +267,6 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
 
         lat = Math.round(latNoDez * 1000) / 1000.0;
         lon = Math.round(lonNoDez * 1000) / 1000.0;
-
-
-       /*if (ffu == null) {
-            ffu = getFiat(lat, lon);
-            testView.setText(ffu.toString());
-
-        } else {
-            testView.setText(ffu.toString());
-        }*/
 
 
     }

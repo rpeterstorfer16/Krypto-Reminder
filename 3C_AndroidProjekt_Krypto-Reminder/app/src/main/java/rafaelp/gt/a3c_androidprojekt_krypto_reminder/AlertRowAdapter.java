@@ -71,13 +71,13 @@ public class AlertRowAdapter extends BaseAdapter {
         } else { viewHolder = (ViewHolder) view.getTag();
         }
 
-            ImageView iv = listItem.findViewById(R.id.transactionRowImageView);
+            ImageView iv = listItem.findViewById(R.id.alertRowImageView);
 
         Picasso.get().load(alert.getCryptoIcon()).into(iv);
-        ((TextView) listItem.findViewById(R.id.transactionRowCoinNameTextView)).setText(alert.getCoinName());
-        ((TextView) listItem.findViewById(R.id.rowTransactionTargetTextView)).setText("Alert at: " + alert.getPriceAlert() + " " + alert.getCurrency());
-        ((TextView) listItem.findViewById(R.id.rowTransactionCurrentPriceTextView)).setText("Current price: " + alert.getCurrentPrice() + " " + alert.getCurrency());
-
+        ((TextView) listItem.findViewById(R.id.alertRowCoinNameTextView)).setText(alert.getCoinName());
+        ((TextView) listItem.findViewById(R.id.rowAlertTargetTextView)).setText("Alert at: " + alert.getPriceAlert() + " " + alert.getCurrency());
+        ((TextView) listItem.findViewById(R.id.rowAlertCurrentPriceTextView)).setText("Current price: " + alert.getCurrentPrice() + " " + alert.getCurrency());
+        ((TextView) listItem.findViewById(R.id.statusTextView)).setText(String.valueOf(alert.getStatus()));
 
 
         viewHolder.button.setOnClickListener(new View.OnClickListener() {
