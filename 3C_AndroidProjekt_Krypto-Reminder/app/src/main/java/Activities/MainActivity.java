@@ -40,20 +40,23 @@ import Data.FiatFromUser;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
 
 
+
+
 public class MainActivity extends AppCompatActivity implements LeftFragment.OnSelectionChangedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private RightFragment rightFragment;
     private boolean showRight = false;
+    protected ArrayList<Coin> coins;
+    private static MainActivity instance;
+
     private static final int RQ_ACCESS_FINE_LOCATION = 123;
     private boolean isGpsAllowed = false;
     private LocationListener locationListener;
     private LocationManager locationManager;
-    protected double lat;
-    protected double lon;
-    private FiatFromUser ffu;
-    protected ArrayList<Coin> coins;
-    private static MainActivity instance;
+    protected static double lat;
+    protected static double lon;
+
 
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String FIATNAME = "fiatname";
@@ -186,6 +189,59 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
 
     }
 
+
+
+
+    public static MainActivity getInstance() {
+        return instance;
+    }
+
+
+    private void initializeView() {
+        Log.d(TAG, "initializeView: entered");
+        rightFragment = (RightFragment) getSupportFragmentManager().findFragmentById(R.id.fragRight);
+        showRight = rightFragment != null && rightFragment.isInLayout();
+    }
+
+
+    private void callRightActivity(int pos, Alert alert) {
+        Log.d(TAG, "callRightActivity: entered");
+        Intent intent = new Intent(this, DetailedActivity.class);
+        intent.putExtra("pos", pos);
+        intent.putExtra("alert", alert);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onSelectionChanged(int pos, Alert alert) {
+        if (showRight) rightFragment.show(pos, alert);
+        else callRightActivity(pos, alert);
+    }
+
+    public void loadData() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        fiatname = sharedPreferences.getString(FIATNAME, "");
+    }
+
+    public String getFiatname() {
+        return fiatname;
+    }
+
+    public void stopService() {
+        Log.d(TAG, "stopService: entered");
+        Intent intent = new Intent(this, AlertService.class);
+        stopService(intent);
+    }
+
+    public void startService() {
+        Log.d(TAG, "startService: entered");
+        Intent intent = new Intent(this, AlertService.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            this.startForegroundService(intent);
+        }
+        startService(intent);
+    }
+
     public void registerSystemService() {
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         // from Api 23 and above you can call getSystemService this way:
@@ -246,7 +302,7 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
         if (isGpsAllowed) {
             locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
-                    400000,
+                    0,
                     2000,
                     locationListener);
         }
@@ -267,58 +323,6 @@ public class MainActivity extends AppCompatActivity implements LeftFragment.OnSe
         lat = Math.round(latNoDez * 1000) / 1000.0;
         lon = Math.round(lonNoDez * 1000) / 1000.0;
 
-
-    }
-
-
-    public static MainActivity getInstance() {
-        return instance;
-    }
-
-
-    private void initializeView() {
-        Log.d(TAG, "initializeView: entered");
-        rightFragment = (RightFragment) getSupportFragmentManager().findFragmentById(R.id.fragRight);
-        showRight = rightFragment != null && rightFragment.isInLayout();
-    }
-
-
-    private void callRightActivity(int pos, Alert alert) {
-        Log.d(TAG, "callRightActivity: entered");
-        Intent intent = new Intent(this, DetailedActivity.class);
-        intent.putExtra("pos", pos);
-        intent.putExtra("alert", alert);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onSelectionChanged(int pos, Alert alert) {
-        if (showRight) rightFragment.show(pos, alert);
-        else callRightActivity(pos, alert);
-    }
-
-    public void loadData() {
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        fiatname = sharedPreferences.getString(FIATNAME, "");
-    }
-
-    public String getFiatname() {
-        return fiatname;
-    }
-
-    public void stopService() {
-        Log.d(TAG, "stopService: entered");
-        Intent intent = new Intent(this, AlertService.class);
-        stopService(intent);
-    }
-
-    public void startService() {
-        Log.d(TAG, "startService: entered");
-        Intent intent = new Intent(this, AlertService.class);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            this.startForegroundService(intent);
-        }
-        startService(intent);
     }
 
 

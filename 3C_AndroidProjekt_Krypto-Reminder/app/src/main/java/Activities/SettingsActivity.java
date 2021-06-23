@@ -1,10 +1,18 @@
 package Activities;
 
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -13,7 +21,10 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -33,9 +44,17 @@ import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    private static final String TAG = SettingsActivity.class.getSimpleName();
     ArrayList<FiatFromUser> currencies;
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String FIATNAME = "fiatname";
+
+    /*private static final int RQ_ACCESS_FINE_LOCATION = 123;
+    private boolean isGpsAllowed = false;
+    private LocationListener locationListener;
+    private LocationManager locationManager;
+    protected double lat;
+    protected double lon;*/
 
     private FiatFromUser ffu;
     LeftFragment lf;
@@ -54,10 +73,10 @@ public class SettingsActivity extends AppCompatActivity {
 
 
         ma = MainActivity.getInstance();
-        ma.registerSystemService();
-        ma.checkPermissionGPS();
+
 
         lf = LeftFragment.getInstance();
+
 
 
         Button applyButton = findViewById(R.id.applySettingsButton);
@@ -75,6 +94,8 @@ public class SettingsActivity extends AppCompatActivity {
 
 
                 if (fiat.equals("Currency from GPS location")) {
+
+
                     if (ma.lat != 0.0 && ma.lon != 0.0) {
                         FiatFromUser fiatGps = getFiatGPS(ma.lat, ma.lon);
 
@@ -150,15 +171,6 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
-    public void setDefault() {
-        if (fiatname.equals("")) {
-            getFiatSpinner("EUR");
-            Spinner sItems = (Spinner) findViewById(R.id.settingsSpinner);
-            sItems.setSelection(adapter.getPosition("EUR"));
-            saveData();
-            updateCurrency();
-        }
-    }
 
     public void getFiatSpinner(String name) {
         currencies = getFiats();
@@ -355,4 +367,87 @@ public class SettingsActivity extends AppCompatActivity {
 
         }
     }
+
+    /*public void registerSystemService() {
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        // from Api 23 and above you can call getSystemService this way:
+        // locationManager = (LocationManager) getSystemService(LocationManager.class);
+    }
+
+    public void checkPermissionGPS() {
+        String permission = Manifest.permission.ACCESS_FINE_LOCATION;
+        if (ActivityCompat.checkSelfPermission(this, permission)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{permission},
+                    RQ_ACCESS_FINE_LOCATION);
+        } else {
+            gpsGranted();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode != RQ_ACCESS_FINE_LOCATION) return;
+        if (grantResults.length > 0 &&
+                grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+        } else {
+            gpsGranted();
+        }
+    }
+
+    public void gpsGranted() {
+        isGpsAllowed = true;
+        locationListener = new LocationListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onLocationChanged(Location location) {
+                displayLocation(location);
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+            }
+        };
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    protected void onResume() {
+        super.onResume();
+        super.onPostResume();
+        if (isGpsAllowed) {
+            locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    0,
+                    2000,
+                    locationListener);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (isGpsAllowed) locationManager.removeUpdates(locationListener);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void displayLocation(Location location) {
+        double latNoDez = location == null ? -1 : location.getLatitude();
+        double lonNoDez = location == null ? -1 : location.getLongitude();
+
+
+        lat = Math.round(latNoDez * 1000) / 1000.0;
+        lon = Math.round(lonNoDez * 1000) / 1000.0;
+
+    }*/
 }

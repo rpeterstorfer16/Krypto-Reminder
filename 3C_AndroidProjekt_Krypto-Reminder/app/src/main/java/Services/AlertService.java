@@ -81,7 +81,6 @@ public class AlertService extends Service {
                         if (alert.getCoinName().equals(coin.getCoinName().substring(0, 1).toUpperCase() + coin.getCoinName().substring(1).toLowerCase())) {
                             alert.setCurrentPrice(coin.getCurrentPrice());
                             alert.setCurrentPrice(Math.floor(coin.getCurrentPrice() * 100) / 100);
-                            Log.d(TAG, alert.getCurrentPrice()+" priceCur");
                         }
                     }
                 }
