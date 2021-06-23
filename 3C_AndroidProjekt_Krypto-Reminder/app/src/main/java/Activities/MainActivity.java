@@ -32,13 +32,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Alert;
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.AlertService;
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Coin;
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.CryptocurrencyServerTask;
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.FiatFromUser;
+import Data.Alert;
+import Services.AlertService;
+import Data.Coin;
+import Tasks.CryptocurrencyServerTask;
+import Data.FiatFromUser;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.DetailedActivity;
 
 
 public class MainActivity extends AppCompatActivity implements LeftFragment.OnSelectionChangedListener {

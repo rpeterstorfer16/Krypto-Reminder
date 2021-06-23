@@ -3,13 +3,11 @@ package Activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
+
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -24,13 +22,10 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.List;
 
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Alert;
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.AlertRowAdapter;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Transaction;
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.TransactionRowAdapter;
+import Data.Transaction;
+import RowAdapter.TransactionRowAdapter;
 
 public class TransactionActivity extends AppCompatActivity implements TransactionRowAdapter.customButtonListener {
     private static ArrayList<Transaction> transactions = new ArrayList<>();

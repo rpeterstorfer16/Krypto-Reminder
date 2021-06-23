@@ -1,28 +1,19 @@
 package Activities;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Build;
+
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -31,13 +22,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Alert;
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Coin;
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.FiatCurrencyServerTask;
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.FiatFromUser;
+import Data.Alert;
+import Data.Coin;
+import Tasks.FiatCurrencyServerTask;
+import Data.FiatFromUser;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
 
 
@@ -46,8 +36,7 @@ public class SettingsActivity extends AppCompatActivity {
     ArrayList<FiatFromUser> currencies;
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String FIATNAME = "fiatname";
-    public static final boolean ISCHECKED = Boolean.parseBoolean("isChecked");
-    public static boolean isChecked;
+
     private FiatFromUser ffu;
     LeftFragment lf;
     private MainActivity ma;
@@ -85,11 +74,8 @@ public class SettingsActivity extends AppCompatActivity {
                 String fiat = fiatSpinner.getSelectedItem().toString();
 
 
-
-
                 if (fiat.equals("Currency from GPS location")) {
-                    if(ma.lat != 0.0 && ma.lon != 0.0)
-                    {
+                    if (ma.lat != 0.0 && ma.lon != 0.0) {
                         FiatFromUser fiatGps = getFiatGPS(ma.lat, ma.lon);
 
                         for (FiatFromUser fiatFromUser : lf.getFiats()) {
@@ -105,7 +91,7 @@ public class SettingsActivity extends AppCompatActivity {
                         Toast toast = Toast.makeText(SettingsActivity.this, "Successful", duration);
                         toast.show();
 
-                    }else{
+                    } else {
                         int duration = Toast.LENGTH_LONG;
 
                         Toast toast = Toast.makeText(SettingsActivity.this, "GPS is still loading...try again in a minute", duration);
@@ -305,7 +291,6 @@ public class SettingsActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        //editor.putBoolean(ISCHECKED, isChecked);
         editor.putString(FIATNAME, ffu.getName());
 
         editor.apply();
@@ -314,7 +299,6 @@ public class SettingsActivity extends AppCompatActivity {
     public void loadData() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         fiatname = sharedPreferences.getString(FIATNAME, "");
-        //isChecked = sharedPreferences.getBoolean(ISCHECKED,true);
 
     }
 
@@ -339,7 +323,6 @@ public class SettingsActivity extends AppCompatActivity {
                     alert.setCurrency(ffu.getSymbol());
                     alert.setPriceAlert(Math.floor(amount2 * 100 / 100));
                     alert.setCurrentPrice(Math.floor(c.getCurrentPrice() * 100) / 100);
-                    //lf.alerts.set(i, alert);
                     lf.writeList(this.getApplicationContext(), lf.getAlerts());
                     lf.mAdapter.notifyDataSetChanged();
                 }

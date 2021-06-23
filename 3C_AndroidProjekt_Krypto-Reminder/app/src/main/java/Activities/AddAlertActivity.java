@@ -1,9 +1,7 @@
 package Activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -19,13 +17,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Alert;
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Coin;
+import Data.Alert;
+import Data.Coin;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Status;
+import enums.Status;
 
 public class AddAlertActivity extends AppCompatActivity {
 
@@ -37,7 +34,7 @@ public class AddAlertActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_alerts);
-        saved=true;
+        saved = true;
         Button cancelButton = findViewById(R.id.cancelButton);
         Button addAlertButton = findViewById(R.id.addAlertButton);
 
@@ -135,8 +132,8 @@ public class AddAlertActivity extends AppCompatActivity {
 
                 DecimalFormat f = new DecimalFormat();
                 f.setMaximumFractionDigits(4);
-                Alert alert = new Alert(selectedCoin.getCoinName().substring(0, 1).toUpperCase() + selectedCoin.getCoinName().substring(1).toLowerCase(), ma.fiatname, higherLower, Math.floor(selectedCoin.getCurrentPrice() * 100) / 100 , amount, selectedCoin.getPriceChangedIn24(), selectedCoin.getMarketCap(), selectedCoin.getIconLink(), Status.ACTIVE);
-                saved=true;
+                Alert alert = new Alert(selectedCoin.getCoinName().substring(0, 1).toUpperCase() + selectedCoin.getCoinName().substring(1).toLowerCase(), ma.fiatname, higherLower, Math.floor(selectedCoin.getCurrentPrice() * 100) / 100, amount, selectedCoin.getPriceChangedIn24(), selectedCoin.getMarketCap(), selectedCoin.getIconLink(), Status.ACTIVE);
+                saved = true;
                 Intent intent = new Intent(AddAlertActivity.this, MainActivity.class);
                 intent.putExtra("newAlert", (Serializable) alert);
                 startActivity(intent);

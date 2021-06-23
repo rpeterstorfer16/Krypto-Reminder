@@ -1,7 +1,6 @@
-package rafaelp.gt.a3c_androidprojekt_krypto_reminder;
+package Data;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class Transaction implements Serializable {
     private String typeOfTransaction;

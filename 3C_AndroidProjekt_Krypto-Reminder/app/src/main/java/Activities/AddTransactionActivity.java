@@ -21,9 +21,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Coin;
+import Data.Coin;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Transaction;
+import Data.Transaction;
 
 public class AddTransactionActivity extends AppCompatActivity {
     @Override

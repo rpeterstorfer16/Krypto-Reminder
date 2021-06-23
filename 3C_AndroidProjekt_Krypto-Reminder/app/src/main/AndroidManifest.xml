@@ -18,7 +18,7 @@ package="rafaelp.gt.a3c_androidprojekt_krypto_reminder">
     android:appComponentFactory="@string/app_name"
     tools:replace="android:appComponentFactory">
 
-    <activity android:name=".DetailedActivity"></activity>
+    <activity android:name="Activities.DetailedActivity"></activity>
     <activity android:name="Activities.MainActivity">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
@@ -31,7 +31,7 @@ package="rafaelp.gt.a3c_androidprojekt_krypto_reminder">
     <activity android:name="Activities.ConverterActivity" />
     <activity android:name="Activities.SettingsActivity" />
     <activity android:name="Activities.AddTransactionActivity" />
-    <service android:name=".AlertService" />
+    <service android:name="Services.AlertService" />
 </application>
 
 </manifest>

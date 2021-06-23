@@ -1,24 +1,20 @@
-package rafaelp.gt.a3c_androidprojekt_krypto_reminder;
+package Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Service;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import Activities.LeftFragment;
-import Activities.MainActivity;
-import Activities.RightFragment;
+import Data.Alert;
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
 
 public class DetailedActivity extends AppCompatActivity {
     private static final String TAG = DetailedActivity.class.getSimpleName();

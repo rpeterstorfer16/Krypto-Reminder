@@ -2,18 +2,14 @@ package Activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.TextView;
+
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -27,15 +23,14 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.HashSet;
+
 import java.util.concurrent.ExecutionException;
 
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Alert;
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.AlertRowAdapter;
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.AlertService;
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Coin;
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.FiatCurrencyServerTask;
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.FiatFromUser;
+import Data.Alert;
+import RowAdapter.AlertRowAdapter;
+import Data.Coin;
+import Tasks.FiatCurrencyServerTask;
+import Data.FiatFromUser;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
 
 public class LeftFragment extends Fragment implements AlertRowAdapter.customButtonListener {
@@ -61,8 +56,6 @@ public class LeftFragment extends Fragment implements AlertRowAdapter.customButt
             alerts = readList(this.getContext());
         }
         //mAdapter.notifyDataSetChanged();
-
-
 
 
         refreshButton.setOnClickListener(v -> {
@@ -122,7 +115,6 @@ public class LeftFragment extends Fragment implements AlertRowAdapter.customButt
                 AddAlertActivity.saved = false;
                 writeList(this.getContext(), alerts);
                 MainActivity.getInstance().startService();
-                Log.d(TAG, "start again");
 
             }
         }
@@ -237,11 +229,10 @@ public class LeftFragment extends Fragment implements AlertRowAdapter.customButt
             return null;
         }
     }
-    public AlertRowAdapter getmAdapter(){
+
+    public AlertRowAdapter getmAdapter() {
         return mAdapter;
     }
-
-
 
 
 }

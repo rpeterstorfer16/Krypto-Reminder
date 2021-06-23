@@ -1,10 +1,8 @@
-package rafaelp.gt.a3c_androidprojekt_krypto_reminder;
-
-import android.app.Service;
-import android.os.Parcel;
-import android.os.Parcelable;
+package Data;
 
 import java.io.Serializable;
+
+import enums.Status;
 
 public class Alert implements Serializable {
     private String coinName;
@@ -34,9 +32,6 @@ public class Alert implements Serializable {
         return coinName;
     }
 
-    public void setCoinName(String coinName) {
-        this.coinName = coinName;
-    }
 
     public String getCurrency() {
         return currency;
@@ -48,10 +43,6 @@ public class Alert implements Serializable {
 
     public String getLowerHigher() {
         return lowerHigher;
-    }
-
-    public void setLowerHigher(String lowerHigher) {
-        this.lowerHigher = lowerHigher;
     }
 
     public double getCurrentPrice() {
@@ -90,9 +81,6 @@ public class Alert implements Serializable {
         return cryptoIcon;
     }
 
-    public void setCryptoIcon(String cryptoIcon) {
-        this.cryptoIcon = cryptoIcon;
-    }
 
     public Status getStatus() {
         return status;

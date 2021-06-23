@@ -1,4 +1,4 @@
-package rafaelp.gt.a3c_androidprojekt_krypto_reminder;
+package Data;
 
 public class FiatFromUser {
     private String symbol;
@@ -17,17 +17,11 @@ public class FiatFromUser {
         return symbol;
     }
 
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
-    }
 
     public String getRate() {
         return rate;
     }
 
-    public void setRate(String rate) {
-        this.rate = rate;
-    }
 
     public String getName() {
         return name;

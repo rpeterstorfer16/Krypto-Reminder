@@ -1,4 +1,4 @@
-package rafaelp.gt.a3c_androidprojekt_krypto_reminder;
+package Data;
 
 public class Coin {
 

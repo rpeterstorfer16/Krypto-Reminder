@@ -1,4 +1,4 @@
-package rafaelp.gt.a3c_androidprojekt_krypto_reminder;
+package Services;
 
 import android.app.Notification;
 import android.app.Service;
@@ -14,6 +14,11 @@ import java.util.ArrayList;
 
 import Activities.LeftFragment;
 import Activities.MainActivity;
+import Data.Alert;
+import Data.Coin;
+import enums.Status;
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Notifications;
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
 
 public class AlertService extends Service {
 

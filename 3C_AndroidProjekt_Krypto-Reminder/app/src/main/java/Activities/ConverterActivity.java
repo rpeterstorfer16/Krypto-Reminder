@@ -24,9 +24,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Coin;
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.FiatCurrencyServerTask;
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.FiatsForConverter;
+import Data.Coin;
+import Tasks.FiatCurrencyServerTask;
+import Data.FiatsForConverter;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
 
 public class ConverterActivity extends AppCompatActivity {

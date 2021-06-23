@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import com.squareup.picasso.Picasso;
 
-import rafaelp.gt.a3c_androidprojekt_krypto_reminder.Alert;
+import Data.Alert;
 import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
 
 

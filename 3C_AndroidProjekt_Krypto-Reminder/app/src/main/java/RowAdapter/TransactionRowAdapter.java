@@ -1,4 +1,4 @@
-package rafaelp.gt.a3c_androidprojekt_krypto_reminder;
+package RowAdapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,7 +14,9 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import Activities.MainActivity;
+
+import Data.Transaction;
+import rafaelp.gt.a3c_androidprojekt_krypto_reminder.R;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
